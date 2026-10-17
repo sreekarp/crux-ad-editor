@@ -1,0 +1,274 @@
+[
+  {
+    "id": "01", "file": "ref_01f278.png",
+    "notes": "Sky bg, big blue bloom top-left, large white card with headline + navy CTA, 3D chat-bubble charms on the card corner, navy logo bottom-left with the tags strip beside it. No photo.",
+    "slots": {
+      "template": "card", "colourway": "light",
+      "headline": "Get a Xero Coach. Get ahead.", "sub": null,
+      "cta": "Get a Xero Coach today", "ctaStyle": "navy", "disclaimer": null,
+      "tags": true, "stat": null,
+      "hero": { "type": "none" },
+      "bloom": "peace",
+      "charms": [{ "charm": "chat", "colour": "yellow" }]
+    }
+  },
+  {
+    "id": "02", "file": "ref_029b5e.png",
+    "notes": "Navy top, blue bloom filling the lower half, centred white headline, colourful illustration in the middle, sky CTA bottom-left, white logo bottom-right.",
+    "slots": {
+      "template": "bold", "colourway": "dark",
+      "headline": "One platform. Every tool.", "sub": null,
+      "cta": "Grow with Xero", "ctaStyle": "sky", "disclaimer": null,
+      "tags": false, "stat": null,
+      "hero": { "type": "illustration", "illustrationId": "illus_anywhere_access" },
+      "bloom": "balance",
+      "charms": [{ "charm": "sparkle", "colour": "yellow" }]
+    }
+  },
+  {
+    "id": "03", "file": "ref_03d838.png",
+    "notes": "Navy bg with blue bloom, centred white headline, three white rounded rows each with a green check + navy word, sparkle and mug charms, sky CTA bottom-left, white logo bottom-right.",
+    "slots": {
+      "template": "checklist", "colourway": "dark",
+      "headline": "Payroll? Automated. Super? Sorted.", "sub": null,
+      "cta": "Try Xero", "ctaStyle": "sky", "disclaimer": null,
+      "items": ["Payroll", "Super", "Me time"],
+      "tags": false, "stat": null,
+      "hero": { "type": "none" },
+      "charms": [{ "charm": "sparkle", "colour": "yellow" }, { "charm": "mug", "colour": "purple" }],
+      "market": "AU"
+    }
+  },
+  {
+    "id": "04", "file": "ref_0470ed.png",
+    "notes": "Navy bg, white headline top-left, sky CTA under it, smiling maker photo cropped in a bloom bleeding bottom-right, white stat card 'Cashflow £12,500' with green sparkline, coin % charm, sky logo bottom-left.",
+    "slots": {
+      "template": "bold", "colourway": "dark",
+      "headline": "Data in. Doubt out.", "sub": null,
+      "cta": "Try Xero today", "ctaStyle": "sky", "disclaimer": null,
+      "tags": false,
+      "stat": { "label": "Cashflow", "value": "£12,500", "variant": "sparkline" },
+      "hero": { "type": "photo", "photoTag": "maker", "photoPrompt": "smiling woman artisan shaping fabric over a wooden hat block in her sunny studio" },
+      "bloom": "harmony",
+      "charms": [{ "charm": "percent", "colour": "yellow" }],
+      "market": "UK"
+    }
+  },
+  {
+    "id": "05a", "file": "ref_055552.png",
+    "notes": "Navy bg with sky blooms top-right and bottom-left, white card with a stat-led headline and navy CTA, glossy pink heart charm, sky logo bottom-left, small survey disclaimer bottom-right.",
+    "slots": {
+      "template": "card", "colourway": "dark",
+      "headline": "93% of customers say Xero is easy to use.*", "sub": null,
+      "cta": "Get 90% off for 6 months", "ctaStyle": "navy",
+      "disclaimer": "*Xero AU Survey, May 2024. Terms apply.",
+      "tags": false, "stat": null,
+      "hero": { "type": "none" },
+      "bloom": "harmony",
+      "charms": [{ "charm": "heart", "colour": "pink" }],
+      "market": "AU"
+    }
+  },
+  {
+    "id": "05b", "file": "ref_05d990.png",
+    "notes": "Card on top (headline, sky CTA, 'Terms apply.'), hand holding a phone with the Xero app below, sky bloom behind the navy logo on the right, sparkle charm.",
+    "slots": {
+      "template": "card", "colourway": "light",
+      "headline": "Suddenly you're fluent in finance.", "sub": null,
+      "cta": "Try Xero for free", "ctaStyle": "sky", "disclaimer": "Terms apply.",
+      "tags": false, "stat": null,
+      "hero": { "type": "device", "deviceId": "device_phone_hand_balance" },
+      "bloom": "harmony",
+      "charms": [{ "charm": "sparkle", "colour": "yellow" }]
+    }
+  },
+  {
+    "id": "06", "file": "ref_06eb7c.png",
+    "notes": "Full-bleed florist photo, sky bloom top-right, white card with headline + sky CTA, navy logo on the sky bloom, pink heart charm.",
+    "slots": {
+      "template": "card", "colourway": "light",
+      "headline": "Remember why you started? We do.", "sub": null,
+      "cta": "Find out more", "ctaStyle": "sky", "disclaimer": null,
+      "tags": false, "stat": null,
+      "hero": { "type": "photo", "photoTag": "florist", "photoPrompt": "smiling Asian woman florist in her flower shop holding a bouquet of fresh flowers" },
+      "bloom": "harmony",
+      "charms": [{ "charm": "heart", "colour": "pink" }]
+    }
+  },
+  {
+    "id": "07", "file": "ref_07e598.png",
+    "notes": "Blue bg, big white headline top-left, photo of a man on his phone at home filling the lower two thirds under a blue bloom edge, green check charm, sky CTA bottom-left, white logo bottom-right on a blue bloom.",
+    "slots": {
+      "template": "bold", "colourway": "blue",
+      "headline": "Up and running in under 4 hours.", "sub": null,
+      "cta": "Make the switch", "ctaStyle": "sky", "disclaimer": null,
+      "tags": false, "stat": null,
+      "hero": { "type": "photo", "photoTag": "homeoffice", "photoPrompt": "smiling man with a beard sitting in his cosy living room looking at his phone" },
+      "bloom": "balance",
+      "charms": [{ "charm": "check", "colour": "green" }]
+    }
+  },
+  {
+    "id": "08", "file": "ref_08e367.png",
+    "notes": "Card with headline, sub and sky CTA on top; boutique owner photo below; sky bloom with navy logo on the right; stat card 'Cash flow R12,500' with sparkline; sparkle charm.",
+    "slots": {
+      "template": "card", "colourway": "light",
+      "headline": "Cash flow without the suspense.",
+      "sub": "See what's coming in. Plan what's going out.",
+      "cta": "See how with Xero", "ctaStyle": "sky", "disclaimer": null,
+      "tags": false,
+      "stat": { "label": "Cash flow", "value": "R12,500", "variant": "sparkline" },
+      "hero": { "type": "photo", "photoTag": "boutique", "photoPrompt": "smiling woman owner folding clothes at the counter of her boutique clothing store" },
+      "bloom": "harmony",
+      "charms": [{ "charm": "sparkle", "colour": "yellow" }],
+      "market": "ZA"
+    }
+  },
+  {
+    "id": "09", "file": "ref_098872.png",
+    "notes": "Blue bg, white headline, comparison of 'Other software' vs 'Xero' in white cards with checks, tags strip, sparkle charm, logo + sky CTA on a navy footer band.",
+    "slots": {
+      "template": "checklist", "colourway": "blue",
+      "headline": "It's not you. It's your software.", "sub": null,
+      "cta": "Switch to Xero", "ctaStyle": "sky", "disclaimer": null,
+      "items": ["Connect to thousands of banks", "Unlimited users on every plan", "Free Xero Coach for 90 days"],
+      "tags": true, "stat": null,
+      "hero": { "type": "none" },
+      "charms": [{ "charm": "sparkle", "colour": "yellow" }]
+    }
+  },
+  {
+    "id": "10", "file": "ref_10adf8.png",
+    "notes": "Navy bg, white headline top-left, sky CTA, hands holding a tablet cropped in a bloom bottom-right, sparkle + hourglass + bulb charms, sky logo bottom-left.",
+    "slots": {
+      "template": "bold", "colourway": "dark",
+      "headline": "Get ahead of what's coming.", "sub": null,
+      "cta": "Download the playbook", "ctaStyle": "sky", "disclaimer": null,
+      "tags": false, "stat": null,
+      "hero": { "type": "device", "deviceId": "device_tablet_hands_payments" },
+      "bloom": "peace",
+      "charms": [{ "charm": "sparkle", "colour": "blue" }, { "charm": "hourglass", "colour": "purple" }, { "charm": "bulb", "colour": "yellow" }]
+    }
+  },
+  {
+    "id": "11", "file": "ref_119795.png",
+    "notes": "Card with headline and sky CTA; florist photo below; navy logo on a sky bloom; 'Payment received R250.00' stat with a green check.",
+    "slots": {
+      "template": "card", "colourway": "light",
+      "headline": "Paid. No invoice chasing needed.", "sub": null,
+      "cta": "Learn more", "ctaStyle": "sky", "disclaimer": null,
+      "tags": false,
+      "stat": { "label": "Payment received", "value": "R250.00", "variant": "check" },
+      "hero": { "type": "photo", "photoTag": "florist", "photoPrompt": "smiling Black woman florist arranging protea flowers in her shop" },
+      "bloom": "harmony",
+      "charms": [],
+      "market": "ZA"
+    }
+  },
+  {
+    "id": "12", "file": "ref_1263fa.png",
+    "notes": "Card with headline and sky CTA; two women laughing at home with a dog; navy logo on a sky bloom; sparkle charm.",
+    "slots": {
+      "template": "card", "colourway": "light",
+      "headline": "Run your business, not your books.", "sub": null,
+      "cta": "Find out more", "ctaStyle": "sky", "disclaimer": null,
+      "tags": false, "stat": null,
+      "hero": { "type": "photo", "photoTag": "homeoffice", "photoPrompt": "two women business partners laughing at a kitchen table at home with a scruffy dog" },
+      "bloom": "harmony",
+      "charms": [{ "charm": "sparkle", "colour": "yellow" }]
+    }
+  },
+  {
+    "id": "13", "file": "ref_1366ef.png",
+    "notes": "Card with a 3-line headline and sky CTA; woodworking bench photo below; navy logo with tags strip on a sky bloom.",
+    "slots": {
+      "template": "card", "colourway": "light",
+      "headline": "Clear setup, so you can clear your schedule.", "sub": null,
+      "cta": "Get matched with a Xero Coach", "ctaStyle": "sky", "disclaimer": null,
+      "tags": true, "stat": null,
+      "hero": { "type": "photo", "photoTag": "woodworker", "photoPrompt": "woodworker planing a plank at his bench, tools and wood shavings around, warm workshop light" },
+      "bloom": "harmony",
+      "charms": []
+    }
+  },
+  {
+    "id": "14", "file": "ref_14a9d0.png",
+    "notes": "Two-tone split: navy bloom on the left with a white headline, sky side with a navy headline; hand holding a phone with the Xero app; heart charm; tags + navy logo bottom-left; white CTA bottom-right.",
+    "slots": {
+      "template": "split", "colourway": "light",
+      "headline": "Other software holds you back.", "headline2": "Xero holds your hand.",
+      "sub": null, "cta": "Switch to Xero", "ctaStyle": "white", "disclaimer": null,
+      "tags": true, "stat": null,
+      "hero": { "type": "device", "deviceId": "device_phone_hand_payments" },
+      "charms": [{ "charm": "heart", "colour": "pink" }]
+    }
+  },
+  {
+    "id": "15", "file": "ref_15e23e.png",
+    "notes": "Blue bg card variant: white card with headline + sky CTA, food-truck owner photo, white logo + white tags on a blue bloom, mug and hourglass charms.",
+    "slots": {
+      "template": "card", "colourway": "blue",
+      "headline": "Xero gets your Sundays back.", "sub": null,
+      "cta": "Switch to Xero", "ctaStyle": "sky", "disclaimer": null,
+      "tags": true, "stat": null,
+      "hero": { "type": "photo", "photoTag": "foodtruck", "photoPrompt": "smiling Black man with a beard leaning on the counter of his food truck by the beach, arms crossed" },
+      "bloom": "harmony",
+      "charms": [{ "charm": "mug", "colour": "green" }, { "charm": "hourglass", "colour": "purple" }]
+    }
+  },
+  {
+    "id": "16", "file": "ref_1696ab.png",
+    "notes": "Sky bg offer: navy headline, sub, navy CTA; hand holding a phone in a round bloom bottom-right; gift, money and sparkle charms; navy logo bottom-left.",
+    "slots": {
+      "template": "offer", "colourway": "light",
+      "headline": "Get a £25 Amazon voucher*.",
+      "sub": "Send your first MTD for Income Tax quarterly update to HMRC through Xero by 7 August.",
+      "cta": "Sign up", "ctaStyle": "navy", "disclaimer": "Terms apply.",
+      "tags": false, "stat": null,
+      "hero": { "type": "device", "deviceId": "device_phone_hand_balance" },
+      "bloom": "energy",
+      "charms": [{ "charm": "gift", "colour": "pink" }, { "charm": "money", "colour": "green" }, { "charm": "sparkle", "colour": "yellow" }],
+      "market": "UK"
+    }
+  },
+  {
+    "id": "17", "file": "ref_173f7f.png",
+    "notes": "Card with headline and sky CTA; builder holding plans on site; navy logo on a sky bloom; sparkle and checkbox charms.",
+    "slots": {
+      "template": "card", "colourway": "light",
+      "headline": "Run your business, not your books.", "sub": null,
+      "cta": "Find out more", "ctaStyle": "sky", "disclaimer": null,
+      "tags": false, "stat": null,
+      "hero": { "type": "photo", "photoTag": "builder", "photoPrompt": "smiling builder in a work shirt holding rolled-up plans on a construction site" },
+      "bloom": "harmony",
+      "charms": [{ "charm": "sparkle", "colour": "yellow" }, { "charm": "checkbox", "colour": "green" }]
+    }
+  },
+  {
+    "id": "18", "file": "ref_18a302.png",
+    "notes": "Sky bg offer: navy headline, navy CTA; beekeeper photo cropped in a big bloom; 'Revenue' area-chart stat card; bar-chart, plane and sparkle charms; tags + navy logo bottom-left.",
+    "slots": {
+      "template": "offer", "colourway": "light",
+      "headline": "Hit your software's ceiling? Say hi to Xero.", "sub": null,
+      "cta": "Switch to Xero", "ctaStyle": "navy", "disclaimer": null,
+      "tags": true,
+      "stat": { "label": "Revenue", "value": "£48,250", "variant": "area" },
+      "hero": { "type": "photo", "photoTag": "beekeeper", "photoPrompt": "beekeeper in a veil holding up a honeycomb frame covered in bees, golden afternoon light" },
+      "bloom": "peace",
+      "charms": [{ "charm": "bars", "colour": "green" }, { "charm": "plane", "colour": "pink" }, { "charm": "sparkle", "colour": "blue" }]
+    }
+  },
+  {
+    "id": "19", "file": "ref_198a29.png",
+    "notes": "Sky bg offer: navy headline, navy CTA, 'Terms apply.'; laptop with the Xero dashboard and typing hands in a bloom bottom-right; pie and sparkle charms; navy logo bottom-left.",
+    "slots": {
+      "template": "offer", "colourway": "light",
+      "headline": "24/7 support that gets you sprinting.", "sub": null,
+      "cta": "Get your first month free", "ctaStyle": "navy", "disclaimer": "Terms apply.",
+      "tags": false, "stat": null,
+      "hero": { "type": "device", "deviceId": "device_laptop_welcome" },
+      "bloom": "harmony",
+      "charms": [{ "charm": "pie", "colour": "green" }, { "charm": "sparkle", "colour": "yellow" }]
+    }
+  }
+]

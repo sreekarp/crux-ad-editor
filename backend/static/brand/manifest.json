@@ -1,0 +1,1500 @@
+{
+ "palette": {
+  "navy": "#000856",
+  "blue": "#1F65D6",
+  "sky": "#3ECCFF",
+  "white": "#FFFFFF",
+  "mint": "#6AEAAA",
+  "yellow": "#FDCC08",
+  "pink": "#FF719B",
+  "lilac": "#CF89FE"
+ },
+ "blooms": [
+  {
+   "shape": "peace",
+   "w": 1294,
+   "h": 1049,
+   "photoMask": true,
+   "mask": "/static/brand/masks/peace.png",
+   "colours": {
+    "navy": "/static/brand/blooms/peace_navy.png",
+    "blue": "/static/brand/blooms/peace_blue.png",
+    "sky": "/static/brand/blooms/peace_sky.png",
+    "white": "/static/brand/blooms/peace_white.png",
+    "mint": "/static/brand/blooms/peace_mint.png",
+    "yellow": "/static/brand/blooms/peace_yellow.png",
+    "pink": "/static/brand/blooms/peace_pink.png",
+    "lilac": "/static/brand/blooms/peace_lilac.png"
+   }
+  },
+  {
+   "shape": "energy",
+   "w": 927,
+   "h": 908,
+   "photoMask": true,
+   "mask": "/static/brand/masks/energy.png",
+   "colours": {
+    "navy": "/static/brand/blooms/energy_navy.png",
+    "blue": "/static/brand/blooms/energy_blue.png",
+    "sky": "/static/brand/blooms/energy_sky.png",
+    "white": "/static/brand/blooms/energy_white.png",
+    "mint": "/static/brand/blooms/energy_mint.png",
+    "yellow": "/static/brand/blooms/energy_yellow.png",
+    "pink": "/static/brand/blooms/energy_pink.png",
+    "lilac": "/static/brand/blooms/energy_lilac.png"
+   }
+  },
+  {
+   "shape": "x",
+   "w": 1088,
+   "h": 1023,
+   "photoMask": true,
+   "mask": "/static/brand/masks/x.png",
+   "colours": {
+    "navy": "/static/brand/blooms/x_navy.png",
+    "blue": "/static/brand/blooms/x_blue.png",
+    "sky": "/static/brand/blooms/x_sky.png",
+    "white": "/static/brand/blooms/x_white.png",
+    "mint": "/static/brand/blooms/x_mint.png",
+    "yellow": "/static/brand/blooms/x_yellow.png",
+    "pink": "/static/brand/blooms/x_pink.png",
+    "lilac": "/static/brand/blooms/x_lilac.png"
+   }
+  },
+  {
+   "shape": "spark",
+   "w": 1040,
+   "h": 1019,
+   "photoMask": false,
+   "mask": "/static/brand/masks/spark.png",
+   "colours": {
+    "navy": "/static/brand/blooms/spark_navy.png",
+    "blue": "/static/brand/blooms/spark_blue.png",
+    "sky": "/static/brand/blooms/spark_sky.png",
+    "white": "/static/brand/blooms/spark_white.png",
+    "mint": "/static/brand/blooms/spark_mint.png",
+    "yellow": "/static/brand/blooms/spark_yellow.png",
+    "pink": "/static/brand/blooms/spark_pink.png",
+    "lilac": "/static/brand/blooms/spark_lilac.png"
+   }
+  },
+  {
+   "shape": "grow",
+   "w": 1160,
+   "h": 650,
+   "photoMask": false,
+   "mask": "/static/brand/masks/grow.png",
+   "colours": {
+    "navy": "/static/brand/blooms/grow_navy.png",
+    "blue": "/static/brand/blooms/grow_blue.png",
+    "sky": "/static/brand/blooms/grow_sky.png",
+    "white": "/static/brand/blooms/grow_white.png",
+    "mint": "/static/brand/blooms/grow_mint.png",
+    "yellow": "/static/brand/blooms/grow_yellow.png",
+    "pink": "/static/brand/blooms/grow_pink.png",
+    "lilac": "/static/brand/blooms/grow_lilac.png"
+   }
+  },
+  {
+   "shape": "pulse",
+   "w": 1562,
+   "h": 964,
+   "photoMask": false,
+   "mask": "/static/brand/masks/pulse.png",
+   "colours": {
+    "navy": "/static/brand/blooms/pulse_navy.png",
+    "blue": "/static/brand/blooms/pulse_blue.png",
+    "sky": "/static/brand/blooms/pulse_sky.png",
+    "white": "/static/brand/blooms/pulse_white.png",
+    "mint": "/static/brand/blooms/pulse_mint.png",
+    "yellow": "/static/brand/blooms/pulse_yellow.png",
+    "pink": "/static/brand/blooms/pulse_pink.png",
+    "lilac": "/static/brand/blooms/pulse_lilac.png"
+   }
+  },
+  {
+   "shape": "harmony",
+   "w": 1250,
+   "h": 1075,
+   "photoMask": true,
+   "mask": "/static/brand/masks/harmony.png",
+   "colours": {
+    "navy": "/static/brand/blooms/harmony_navy.png",
+    "blue": "/static/brand/blooms/harmony_blue.png",
+    "sky": "/static/brand/blooms/harmony_sky.png",
+    "white": "/static/brand/blooms/harmony_white.png",
+    "mint": "/static/brand/blooms/harmony_mint.png",
+    "yellow": "/static/brand/blooms/harmony_yellow.png",
+    "pink": "/static/brand/blooms/harmony_pink.png",
+    "lilac": "/static/brand/blooms/harmony_lilac.png"
+   }
+  },
+  {
+   "shape": "motion",
+   "w": 1621,
+   "h": 923,
+   "photoMask": false,
+   "mask": "/static/brand/masks/motion.png",
+   "colours": {
+    "navy": "/static/brand/blooms/motion_navy.png",
+    "blue": "/static/brand/blooms/motion_blue.png",
+    "sky": "/static/brand/blooms/motion_sky.png",
+    "white": "/static/brand/blooms/motion_white.png",
+    "mint": "/static/brand/blooms/motion_mint.png",
+    "yellow": "/static/brand/blooms/motion_yellow.png",
+    "pink": "/static/brand/blooms/motion_pink.png",
+    "lilac": "/static/brand/blooms/motion_lilac.png"
+   }
+  },
+  {
+   "shape": "balance",
+   "w": 1458,
+   "h": 964,
+   "photoMask": true,
+   "mask": "/static/brand/masks/balance.png",
+   "colours": {
+    "navy": "/static/brand/blooms/balance_navy.png",
+    "blue": "/static/brand/blooms/balance_blue.png",
+    "sky": "/static/brand/blooms/balance_sky.png",
+    "white": "/static/brand/blooms/balance_white.png",
+    "mint": "/static/brand/blooms/balance_mint.png",
+    "yellow": "/static/brand/blooms/balance_yellow.png",
+    "pink": "/static/brand/blooms/balance_pink.png",
+    "lilac": "/static/brand/blooms/balance_lilac.png"
+   }
+  },
+  {
+   "shape": "ease",
+   "w": 1454,
+   "h": 838,
+   "photoMask": false,
+   "mask": "/static/brand/masks/ease.png",
+   "colours": {
+    "navy": "/static/brand/blooms/ease_navy.png",
+    "blue": "/static/brand/blooms/ease_blue.png",
+    "sky": "/static/brand/blooms/ease_sky.png",
+    "white": "/static/brand/blooms/ease_white.png",
+    "mint": "/static/brand/blooms/ease_mint.png",
+    "yellow": "/static/brand/blooms/ease_yellow.png",
+    "pink": "/static/brand/blooms/ease_pink.png",
+    "lilac": "/static/brand/blooms/ease_lilac.png"
+   }
+  },
+  {
+   "shape": "surge",
+   "w": 1230,
+   "h": 947,
+   "photoMask": false,
+   "mask": "/static/brand/masks/surge.png",
+   "colours": {
+    "navy": "/static/brand/blooms/surge_navy.png",
+    "blue": "/static/brand/blooms/surge_blue.png",
+    "sky": "/static/brand/blooms/surge_sky.png",
+    "white": "/static/brand/blooms/surge_white.png",
+    "mint": "/static/brand/blooms/surge_mint.png",
+    "yellow": "/static/brand/blooms/surge_yellow.png",
+    "pink": "/static/brand/blooms/surge_pink.png",
+    "lilac": "/static/brand/blooms/surge_lilac.png"
+   }
+  },
+  {
+   "shape": "stride",
+   "w": 1324,
+   "h": 859,
+   "photoMask": false,
+   "mask": "/static/brand/masks/stride.png",
+   "colours": {
+    "navy": "/static/brand/blooms/stride_navy.png",
+    "blue": "/static/brand/blooms/stride_blue.png",
+    "sky": "/static/brand/blooms/stride_sky.png",
+    "white": "/static/brand/blooms/stride_white.png",
+    "mint": "/static/brand/blooms/stride_mint.png",
+    "yellow": "/static/brand/blooms/stride_yellow.png",
+    "pink": "/static/brand/blooms/stride_pink.png",
+    "lilac": "/static/brand/blooms/stride_lilac.png"
+   }
+  }
+ ],
+ "backgrounds": [
+  {
+   "id": "bg_01",
+   "aspect": "1:1",
+   "w": 1158,
+   "h": 1158,
+   "colours": {
+    "navy": "/static/brand/bg/bg_01_navy.png",
+    "blue": "/static/brand/bg/bg_01_blue.png",
+    "sky": "/static/brand/bg/bg_01_sky.png",
+    "white": "/static/brand/bg/bg_01_white.png"
+   }
+  },
+  {
+   "id": "bg_02",
+   "aspect": "1:1",
+   "w": 1158,
+   "h": 1158,
+   "colours": {
+    "navy": "/static/brand/bg/bg_02_navy.png",
+    "blue": "/static/brand/bg/bg_02_blue.png",
+    "sky": "/static/brand/bg/bg_02_sky.png",
+    "white": "/static/brand/bg/bg_02_white.png"
+   }
+  },
+  {
+   "id": "bg_03",
+   "aspect": "1:1",
+   "w": 1158,
+   "h": 1158,
+   "colours": {
+    "navy": "/static/brand/bg/bg_03_navy.png",
+    "blue": "/static/brand/bg/bg_03_blue.png",
+    "sky": "/static/brand/bg/bg_03_sky.png",
+    "white": "/static/brand/bg/bg_03_white.png"
+   }
+  },
+  {
+   "id": "bg_04",
+   "aspect": "9:16",
+   "w": 1158,
+   "h": 2056,
+   "colours": {
+    "navy": "/static/brand/bg/bg_04_navy.png",
+    "blue": "/static/brand/bg/bg_04_blue.png",
+    "sky": "/static/brand/bg/bg_04_sky.png",
+    "white": "/static/brand/bg/bg_04_white.png"
+   }
+  },
+  {
+   "id": "bg_05",
+   "aspect": "1:1",
+   "w": 1158,
+   "h": 1158,
+   "colours": {
+    "navy": "/static/brand/bg/bg_05_navy.png",
+    "blue": "/static/brand/bg/bg_05_blue.png",
+    "sky": "/static/brand/bg/bg_05_sky.png",
+    "white": "/static/brand/bg/bg_05_white.png"
+   }
+  },
+  {
+   "id": "bg_06",
+   "aspect": "1:1",
+   "w": 1158,
+   "h": 1158,
+   "colours": {
+    "navy": "/static/brand/bg/bg_06_navy.png",
+    "blue": "/static/brand/bg/bg_06_blue.png",
+    "sky": "/static/brand/bg/bg_06_sky.png",
+    "white": "/static/brand/bg/bg_06_white.png"
+   }
+  },
+  {
+   "id": "bg_07",
+   "aspect": "9:16",
+   "w": 1158,
+   "h": 2056,
+   "colours": {
+    "navy": "/static/brand/bg/bg_07_navy.png",
+    "blue": "/static/brand/bg/bg_07_blue.png",
+    "sky": "/static/brand/bg/bg_07_sky.png",
+    "white": "/static/brand/bg/bg_07_white.png"
+   }
+  },
+  {
+   "id": "bg_08",
+   "aspect": "1:1",
+   "w": 1158,
+   "h": 1158,
+   "colours": {
+    "navy": "/static/brand/bg/bg_08_navy.png",
+    "blue": "/static/brand/bg/bg_08_blue.png",
+    "sky": "/static/brand/bg/bg_08_sky.png",
+    "white": "/static/brand/bg/bg_08_white.png"
+   }
+  },
+  {
+   "id": "bg_09",
+   "aspect": "1:1",
+   "w": 1158,
+   "h": 1158,
+   "colours": {
+    "navy": "/static/brand/bg/bg_09_navy.png",
+    "blue": "/static/brand/bg/bg_09_blue.png",
+    "sky": "/static/brand/bg/bg_09_sky.png",
+    "white": "/static/brand/bg/bg_09_white.png"
+   }
+  },
+  {
+   "id": "bg_10",
+   "aspect": "1:1",
+   "w": 1158,
+   "h": 1158,
+   "colours": {
+    "navy": "/static/brand/bg/bg_10_navy.png",
+    "blue": "/static/brand/bg/bg_10_blue.png",
+    "sky": "/static/brand/bg/bg_10_sky.png",
+    "white": "/static/brand/bg/bg_10_white.png"
+   }
+  },
+  {
+   "id": "bg_11",
+   "aspect": "1:1",
+   "w": 1158,
+   "h": 1158,
+   "colours": {
+    "navy": "/static/brand/bg/bg_11_navy.png",
+    "blue": "/static/brand/bg/bg_11_blue.png",
+    "sky": "/static/brand/bg/bg_11_sky.png",
+    "white": "/static/brand/bg/bg_11_white.png"
+   }
+  },
+  {
+   "id": "bg_12",
+   "aspect": "9:16",
+   "w": 1158,
+   "h": 2056,
+   "colours": {
+    "navy": "/static/brand/bg/bg_12_navy.png",
+    "blue": "/static/brand/bg/bg_12_blue.png",
+    "sky": "/static/brand/bg/bg_12_sky.png",
+    "white": "/static/brand/bg/bg_12_white.png"
+   }
+  },
+  {
+   "id": "bg_13",
+   "aspect": "9:16",
+   "w": 1158,
+   "h": 2056,
+   "colours": {
+    "navy": "/static/brand/bg/bg_13_navy.png",
+    "blue": "/static/brand/bg/bg_13_blue.png",
+    "sky": "/static/brand/bg/bg_13_sky.png",
+    "white": "/static/brand/bg/bg_13_white.png"
+   }
+  },
+  {
+   "id": "bg_14",
+   "aspect": "9:16",
+   "w": 1158,
+   "h": 2056,
+   "colours": {
+    "navy": "/static/brand/bg/bg_14_navy.png",
+    "blue": "/static/brand/bg/bg_14_blue.png",
+    "sky": "/static/brand/bg/bg_14_sky.png",
+    "white": "/static/brand/bg/bg_14_white.png"
+   }
+  },
+  {
+   "id": "bg_15",
+   "aspect": "9:16",
+   "w": 1158,
+   "h": 2056,
+   "colours": {
+    "navy": "/static/brand/bg/bg_15_navy.png",
+    "blue": "/static/brand/bg/bg_15_blue.png",
+    "sky": "/static/brand/bg/bg_15_sky.png",
+    "white": "/static/brand/bg/bg_15_white.png"
+   }
+  },
+  {
+   "id": "bg_16",
+   "aspect": "9:16",
+   "w": 1158,
+   "h": 2056,
+   "colours": {
+    "navy": "/static/brand/bg/bg_16_navy.png",
+    "blue": "/static/brand/bg/bg_16_blue.png",
+    "sky": "/static/brand/bg/bg_16_sky.png",
+    "white": "/static/brand/bg/bg_16_white.png"
+   }
+  },
+  {
+   "id": "bg_17",
+   "aspect": "9:16",
+   "w": 1158,
+   "h": 2056,
+   "colours": {
+    "navy": "/static/brand/bg/bg_17_navy.png",
+    "blue": "/static/brand/bg/bg_17_blue.png",
+    "sky": "/static/brand/bg/bg_17_sky.png",
+    "white": "/static/brand/bg/bg_17_white.png"
+   }
+  },
+  {
+   "id": "bg_18",
+   "aspect": "9:16",
+   "w": 1158,
+   "h": 2056,
+   "colours": {
+    "navy": "/static/brand/bg/bg_18_navy.png",
+    "blue": "/static/brand/bg/bg_18_blue.png",
+    "sky": "/static/brand/bg/bg_18_sky.png",
+    "white": "/static/brand/bg/bg_18_white.png"
+   }
+  }
+ ],
+ "charms": [
+  {
+   "type": "check",
+   "w": 332,
+   "h": 344,
+   "colours": {
+    "blue": "/static/brand/charms/check_blue.png",
+    "green": "/static/brand/charms/check_green.png",
+    "yellow": "/static/brand/charms/check_yellow.png",
+    "pink": "/static/brand/charms/check_pink.png",
+    "purple": "/static/brand/charms/check_purple.png"
+   }
+  },
+  {
+   "type": "thumbs",
+   "w": 316,
+   "h": 324,
+   "colours": {
+    "blue": "/static/brand/charms/thumbs_blue.png",
+    "green": "/static/brand/charms/thumbs_green.png",
+    "yellow": "/static/brand/charms/thumbs_yellow.png",
+    "pink": "/static/brand/charms/thumbs_pink.png",
+    "purple": "/static/brand/charms/thumbs_purple.png"
+   }
+  },
+  {
+   "type": "sparkle",
+   "w": 308,
+   "h": 332,
+   "colours": {
+    "blue": "/static/brand/charms/sparkle_blue.png",
+    "green": "/static/brand/charms/sparkle_green.png",
+    "yellow": "/static/brand/charms/sparkle_yellow.png",
+    "pink": "/static/brand/charms/sparkle_pink.png",
+    "purple": "/static/brand/charms/sparkle_purple.png"
+   }
+  },
+  {
+   "type": "paper",
+   "w": 328,
+   "h": 300,
+   "colours": {
+    "blue": "/static/brand/charms/paper_blue.png",
+    "green": "/static/brand/charms/paper_green.png",
+    "yellow": "/static/brand/charms/paper_yellow.png",
+    "pink": "/static/brand/charms/paper_pink.png",
+    "purple": "/static/brand/charms/paper_purple.png"
+   }
+  },
+  {
+   "type": "lock",
+   "w": 236,
+   "h": 340,
+   "colours": {
+    "blue": "/static/brand/charms/lock_blue.png",
+    "green": "/static/brand/charms/lock_green.png",
+    "yellow": "/static/brand/charms/lock_yellow.png",
+    "pink": "/static/brand/charms/lock_pink.png",
+    "purple": "/static/brand/charms/lock_purple.png"
+   }
+  },
+  {
+   "type": "pie",
+   "w": 284,
+   "h": 308,
+   "colours": {
+    "blue": "/static/brand/charms/pie_blue.png",
+    "green": "/static/brand/charms/pie_green.png",
+    "yellow": "/static/brand/charms/pie_yellow.png",
+    "pink": "/static/brand/charms/pie_pink.png",
+    "purple": "/static/brand/charms/pie_purple.png"
+   }
+  },
+  {
+   "type": "bars",
+   "w": 328,
+   "h": 308,
+   "colours": {
+    "blue": "/static/brand/charms/bars_blue.png",
+    "green": "/static/brand/charms/bars_green.png",
+    "yellow": "/static/brand/charms/bars_yellow.png",
+    "pink": "/static/brand/charms/bars_pink.png",
+    "purple": "/static/brand/charms/bars_purple.png"
+   }
+  },
+  {
+   "type": "plane",
+   "w": 332,
+   "h": 312,
+   "colours": {
+    "blue": "/static/brand/charms/plane_blue.png",
+    "green": "/static/brand/charms/plane_green.png",
+    "yellow": "/static/brand/charms/plane_yellow.png",
+    "pink": "/static/brand/charms/plane_pink.png",
+    "purple": "/static/brand/charms/plane_purple.png"
+   }
+  },
+  {
+   "type": "coin_wave",
+   "w": 328,
+   "h": 316,
+   "colours": {
+    "blue": "/static/brand/charms/coin_wave_blue.png",
+    "green": "/static/brand/charms/coin_wave_green.png",
+    "yellow": "/static/brand/charms/coin_wave_yellow.png",
+    "pink": "/static/brand/charms/coin_wave_pink.png",
+    "purple": "/static/brand/charms/coin_wave_purple.png"
+   }
+  },
+  {
+   "type": "coin",
+   "w": 328,
+   "h": 292,
+   "colours": {
+    "blue": "/static/brand/charms/coin_blue.png",
+    "green": "/static/brand/charms/coin_green.png",
+    "yellow": "/static/brand/charms/coin_yellow.png",
+    "pink": "/static/brand/charms/coin_pink.png",
+    "purple": "/static/brand/charms/coin_purple.png"
+   }
+  },
+  {
+   "type": "money",
+   "w": 372,
+   "h": 320,
+   "colours": {
+    "blue": "/static/brand/charms/money_blue.png",
+    "green": "/static/brand/charms/money_green.png",
+    "yellow": "/static/brand/charms/money_yellow.png",
+    "pink": "/static/brand/charms/money_pink.png",
+    "purple": "/static/brand/charms/money_purple.png"
+   }
+  },
+  {
+   "type": "percent",
+   "w": 332,
+   "h": 344,
+   "colours": {
+    "blue": "/static/brand/charms/percent_blue.png",
+    "green": "/static/brand/charms/percent_green.png",
+    "yellow": "/static/brand/charms/percent_yellow.png",
+    "pink": "/static/brand/charms/percent_pink.png",
+    "purple": "/static/brand/charms/percent_purple.png"
+   }
+  },
+  {
+   "type": "mug",
+   "w": 316,
+   "h": 416,
+   "colours": {
+    "blue": "/static/brand/charms/mug_blue.png",
+    "green": "/static/brand/charms/mug_green.png",
+    "yellow": "/static/brand/charms/mug_yellow.png",
+    "pink": "/static/brand/charms/mug_pink.png",
+    "purple": "/static/brand/charms/mug_purple.png"
+   }
+  },
+  {
+   "type": "point",
+   "w": 372,
+   "h": 376,
+   "colours": {
+    "blue": "/static/brand/charms/point_blue.png",
+    "green": "/static/brand/charms/point_green.png",
+    "yellow": "/static/brand/charms/point_yellow.png",
+    "pink": "/static/brand/charms/point_pink.png",
+    "purple": "/static/brand/charms/point_purple.png"
+   }
+  },
+  {
+   "type": "gauge",
+   "w": 404,
+   "h": 292,
+   "colours": {
+    "blue": "/static/brand/charms/gauge_blue.png",
+    "green": "/static/brand/charms/gauge_green.png",
+    "yellow": "/static/brand/charms/gauge_yellow.png",
+    "pink": "/static/brand/charms/gauge_pink.png",
+    "purple": "/static/brand/charms/gauge_purple.png"
+   }
+  },
+  {
+   "type": "battery",
+   "w": 420,
+   "h": 336,
+   "colours": {
+    "blue": "/static/brand/charms/battery_blue.png",
+    "green": "/static/brand/charms/battery_green.png",
+    "yellow": "/static/brand/charms/battery_yellow.png",
+    "pink": "/static/brand/charms/battery_pink.png",
+    "purple": "/static/brand/charms/battery_purple.png"
+   }
+  },
+  {
+   "type": "link",
+   "w": 352,
+   "h": 336,
+   "colours": {
+    "blue": "/static/brand/charms/link_blue.png",
+    "green": "/static/brand/charms/link_green.png",
+    "yellow": "/static/brand/charms/link_yellow.png",
+    "pink": "/static/brand/charms/link_pink.png",
+    "purple": "/static/brand/charms/link_purple.png"
+   }
+  },
+  {
+   "type": "link_broken",
+   "w": 344,
+   "h": 328,
+   "colours": {
+    "blue": "/static/brand/charms/link_broken_blue.png",
+    "green": "/static/brand/charms/link_broken_green.png",
+    "yellow": "/static/brand/charms/link_broken_yellow.png",
+    "pink": "/static/brand/charms/link_broken_pink.png",
+    "purple": "/static/brand/charms/link_broken_purple.png"
+   }
+  },
+  {
+   "type": "bell",
+   "w": 256,
+   "h": 280,
+   "colours": {
+    "blue": "/static/brand/charms/bell_blue.png",
+    "green": "/static/brand/charms/bell_green.png",
+    "yellow": "/static/brand/charms/bell_yellow.png",
+    "pink": "/static/brand/charms/bell_pink.png",
+    "purple": "/static/brand/charms/bell_purple.png"
+   }
+  },
+  {
+   "type": "flame",
+   "w": 312,
+   "h": 404,
+   "colours": {
+    "blue": "/static/brand/charms/flame_blue.png",
+    "green": "/static/brand/charms/flame_green.png",
+    "yellow": "/static/brand/charms/flame_yellow.png",
+    "pink": "/static/brand/charms/flame_pink.png",
+    "purple": "/static/brand/charms/flame_purple.png"
+   }
+  },
+  {
+   "type": "chat",
+   "w": 368,
+   "h": 240,
+   "colours": {
+    "blue": "/static/brand/charms/chat_blue.png",
+    "green": "/static/brand/charms/chat_green.png",
+    "yellow": "/static/brand/charms/chat_yellow.png",
+    "pink": "/static/brand/charms/chat_pink.png",
+    "purple": "/static/brand/charms/chat_purple.png"
+   }
+  },
+  {
+   "type": "heart",
+   "w": 340,
+   "h": 304,
+   "colours": {
+    "blue": "/static/brand/charms/heart_blue.png",
+    "green": "/static/brand/charms/heart_green.png",
+    "yellow": "/static/brand/charms/heart_yellow.png",
+    "pink": "/static/brand/charms/heart_pink.png",
+    "purple": "/static/brand/charms/heart_purple.png"
+   }
+  },
+  {
+   "type": "hourglass",
+   "w": 272,
+   "h": 360,
+   "colours": {
+    "blue": "/static/brand/charms/hourglass_blue.png",
+    "green": "/static/brand/charms/hourglass_green.png",
+    "yellow": "/static/brand/charms/hourglass_yellow.png",
+    "pink": "/static/brand/charms/hourglass_pink.png",
+    "purple": "/static/brand/charms/hourglass_purple.png"
+   }
+  },
+  {
+   "type": "stopwatch",
+   "w": 356,
+   "h": 372,
+   "colours": {
+    "blue": "/static/brand/charms/stopwatch_blue.png",
+    "green": "/static/brand/charms/stopwatch_green.png",
+    "yellow": "/static/brand/charms/stopwatch_yellow.png",
+    "pink": "/static/brand/charms/stopwatch_pink.png",
+    "purple": "/static/brand/charms/stopwatch_purple.png"
+   }
+  },
+  {
+   "type": "bulb",
+   "w": 256,
+   "h": 360,
+   "colours": {
+    "blue": "/static/brand/charms/bulb_blue.png",
+    "green": "/static/brand/charms/bulb_green.png",
+    "yellow": "/static/brand/charms/bulb_yellow.png",
+    "pink": "/static/brand/charms/bulb_pink.png",
+    "purple": "/static/brand/charms/bulb_purple.png"
+   }
+  },
+  {
+   "type": "cocktail",
+   "w": 304,
+   "h": 420,
+   "colours": {
+    "blue": "/static/brand/charms/cocktail_blue.png",
+    "green": "/static/brand/charms/cocktail_green.png",
+    "yellow": "/static/brand/charms/cocktail_yellow.png",
+    "pink": "/static/brand/charms/cocktail_pink.png",
+    "purple": "/static/brand/charms/cocktail_purple.png"
+   }
+  },
+  {
+   "type": "coconut",
+   "w": 448,
+   "h": 380,
+   "colours": {
+    "blue": "/static/brand/charms/coconut_blue.png",
+    "green": "/static/brand/charms/coconut_green.png",
+    "yellow": "/static/brand/charms/coconut_yellow.png",
+    "pink": "/static/brand/charms/coconut_pink.png",
+    "purple": "/static/brand/charms/coconut_purple.png"
+   }
+  },
+  {
+   "type": "deckchair",
+   "w": 372,
+   "h": 376,
+   "colours": {
+    "blue": "/static/brand/charms/deckchair_blue.png",
+    "green": "/static/brand/charms/deckchair_green.png",
+    "yellow": "/static/brand/charms/deckchair_yellow.png",
+    "pink": "/static/brand/charms/deckchair_pink.png",
+    "purple": "/static/brand/charms/deckchair_purple.png"
+   }
+  },
+  {
+   "type": "coins_percent",
+   "w": 396,
+   "h": 384,
+   "colours": {
+    "blue": "/static/brand/charms/coins_percent_blue.png",
+    "green": "/static/brand/charms/coins_percent_green.png",
+    "yellow": "/static/brand/charms/coins_percent_yellow.png",
+    "pink": "/static/brand/charms/coins_percent_pink.png",
+    "purple": "/static/brand/charms/coins_percent_purple.png"
+   }
+  },
+  {
+   "type": "tax",
+   "w": 332,
+   "h": 348,
+   "colours": {
+    "blue": "/static/brand/charms/tax_blue.png",
+    "green": "/static/brand/charms/tax_green.png",
+    "yellow": "/static/brand/charms/tax_yellow.png",
+    "pink": "/static/brand/charms/tax_pink.png",
+    "purple": "/static/brand/charms/tax_purple.png"
+   }
+  },
+  {
+   "type": "clock",
+   "w": 332,
+   "h": 312,
+   "colours": {
+    "blue": "/static/brand/charms/clock_blue.png",
+    "green": "/static/brand/charms/clock_green.png",
+    "yellow": "/static/brand/charms/clock_yellow.png",
+    "pink": "/static/brand/charms/clock_pink.png",
+    "purple": "/static/brand/charms/clock_purple.png"
+   }
+  },
+  {
+   "type": "clock_melt",
+   "w": 340,
+   "h": 364,
+   "colours": {
+    "blue": "/static/brand/charms/clock_melt_blue.png",
+    "green": "/static/brand/charms/clock_melt_green.png",
+    "yellow": "/static/brand/charms/clock_melt_yellow.png",
+    "pink": "/static/brand/charms/clock_melt_pink.png",
+    "purple": "/static/brand/charms/clock_melt_purple.png"
+   }
+  },
+  {
+   "type": "calendar",
+   "w": 328,
+   "h": 316,
+   "colours": {
+    "blue": "/static/brand/charms/calendar_blue.png",
+    "green": "/static/brand/charms/calendar_green.png",
+    "yellow": "/static/brand/charms/calendar_yellow.png",
+    "pink": "/static/brand/charms/calendar_pink.png",
+    "purple": "/static/brand/charms/calendar_purple.png"
+   }
+  },
+  {
+   "type": "calendar_x",
+   "w": 328,
+   "h": 316,
+   "colours": {
+    "blue": "/static/brand/charms/calendar_x_blue.png",
+    "green": "/static/brand/charms/calendar_x_green.png",
+    "yellow": "/static/brand/charms/calendar_x_yellow.png",
+    "pink": "/static/brand/charms/calendar_x_pink.png",
+    "purple": "/static/brand/charms/calendar_x_purple.png"
+   }
+  },
+  {
+   "type": "clipboard",
+   "w": 392,
+   "h": 388,
+   "colours": {
+    "blue": "/static/brand/charms/clipboard_blue.png",
+    "green": "/static/brand/charms/clipboard_green.png",
+    "yellow": "/static/brand/charms/clipboard_yellow.png",
+    "pink": "/static/brand/charms/clipboard_pink.png",
+    "purple": "/static/brand/charms/clipboard_purple.png"
+   }
+  },
+  {
+   "type": "phone",
+   "w": 356,
+   "h": 404,
+   "colours": {
+    "blue": "/static/brand/charms/phone_blue.png",
+    "green": "/static/brand/charms/phone_green.png",
+    "yellow": "/static/brand/charms/phone_yellow.png",
+    "pink": "/static/brand/charms/phone_pink.png",
+    "purple": "/static/brand/charms/phone_purple.png"
+   }
+  },
+  {
+   "type": "laptop",
+   "w": 412,
+   "h": 328,
+   "colours": {
+    "blue": "/static/brand/charms/laptop_blue.png",
+    "green": "/static/brand/charms/laptop_green.png",
+    "yellow": "/static/brand/charms/laptop_yellow.png",
+    "pink": "/static/brand/charms/laptop_pink.png",
+    "purple": "/static/brand/charms/laptop_purple.png"
+   }
+  },
+  {
+   "type": "phone_bell",
+   "w": 360,
+   "h": 428,
+   "colours": {
+    "blue": "/static/brand/charms/phone_bell_blue.png",
+    "green": "/static/brand/charms/phone_bell_green.png",
+    "yellow": "/static/brand/charms/phone_bell_yellow.png",
+    "pink": "/static/brand/charms/phone_bell_pink.png",
+    "purple": "/static/brand/charms/phone_bell_purple.png"
+   }
+  },
+  {
+   "type": "phone_card",
+   "w": 428,
+   "h": 404,
+   "colours": {
+    "blue": "/static/brand/charms/phone_card_blue.png",
+    "green": "/static/brand/charms/phone_card_green.png",
+    "yellow": "/static/brand/charms/phone_card_yellow.png",
+    "pink": "/static/brand/charms/phone_card_pink.png",
+    "purple": "/static/brand/charms/phone_card_purple.png"
+   }
+  },
+  {
+   "type": "badge",
+   "w": 432,
+   "h": 376,
+   "colours": {
+    "blue": "/static/brand/charms/badge_blue.png",
+    "green": "/static/brand/charms/badge_green.png",
+    "yellow": "/static/brand/charms/badge_yellow.png",
+    "pink": "/static/brand/charms/badge_pink.png",
+    "purple": "/static/brand/charms/badge_purple.png"
+   }
+  },
+  {
+   "type": "card",
+   "w": 388,
+   "h": 352,
+   "colours": {
+    "blue": "/static/brand/charms/card_blue.png",
+    "green": "/static/brand/charms/card_green.png",
+    "yellow": "/static/brand/charms/card_yellow.png",
+    "pink": "/static/brand/charms/card_pink.png",
+    "purple": "/static/brand/charms/card_purple.png"
+   }
+  },
+  {
+   "type": "stones",
+   "w": 340,
+   "h": 428,
+   "colours": {
+    "blue": "/static/brand/charms/stones_blue.png",
+    "green": "/static/brand/charms/stones_green.png",
+    "yellow": "/static/brand/charms/stones_yellow.png",
+    "pink": "/static/brand/charms/stones_pink.png",
+    "purple": "/static/brand/charms/stones_purple.png"
+   }
+  },
+  {
+   "type": "stamp",
+   "w": 300,
+   "h": 344,
+   "colours": {
+    "blue": "/static/brand/charms/stamp_blue.png",
+    "green": "/static/brand/charms/stamp_green.png",
+    "yellow": "/static/brand/charms/stamp_yellow.png",
+    "pink": "/static/brand/charms/stamp_pink.png",
+    "purple": "/static/brand/charms/stamp_purple.png"
+   }
+  },
+  {
+   "type": "keys",
+   "w": 348,
+   "h": 360,
+   "colours": {
+    "blue": "/static/brand/charms/keys_blue.png",
+    "green": "/static/brand/charms/keys_green.png",
+    "yellow": "/static/brand/charms/keys_yellow.png",
+    "pink": "/static/brand/charms/keys_pink.png",
+    "purple": "/static/brand/charms/keys_purple.png"
+   }
+  },
+  {
+   "type": "keyring",
+   "w": 412,
+   "h": 364,
+   "colours": {
+    "blue": "/static/brand/charms/keyring_blue.png",
+    "green": "/static/brand/charms/keyring_green.png",
+    "yellow": "/static/brand/charms/keyring_yellow.png",
+    "pink": "/static/brand/charms/keyring_pink.png",
+    "purple": "/static/brand/charms/keyring_purple.png"
+   }
+  },
+  {
+   "type": "magnifier",
+   "w": 328,
+   "h": 372,
+   "colours": {
+    "blue": "/static/brand/charms/magnifier_blue.png",
+    "green": "/static/brand/charms/magnifier_green.png",
+    "yellow": "/static/brand/charms/magnifier_yellow.png",
+    "pink": "/static/brand/charms/magnifier_pink.png",
+    "purple": "/static/brand/charms/magnifier_purple.png"
+   }
+  },
+  {
+   "type": "trophy",
+   "w": 328,
+   "h": 332,
+   "colours": {
+    "blue": "/static/brand/charms/trophy_blue.png",
+    "green": "/static/brand/charms/trophy_green.png",
+    "yellow": "/static/brand/charms/trophy_yellow.png",
+    "pink": "/static/brand/charms/trophy_pink.png",
+    "purple": "/static/brand/charms/trophy_purple.png"
+   }
+  },
+  {
+   "type": "folder",
+   "w": 356,
+   "h": 388,
+   "colours": {
+    "blue": "/static/brand/charms/folder_blue.png",
+    "green": "/static/brand/charms/folder_green.png",
+    "yellow": "/static/brand/charms/folder_yellow.png",
+    "pink": "/static/brand/charms/folder_pink.png",
+    "purple": "/static/brand/charms/folder_purple.png"
+   }
+  },
+  {
+   "type": "sticky_note",
+   "w": 332,
+   "h": 296,
+   "colours": {
+    "blue": "/static/brand/charms/sticky_note_blue.png",
+    "green": "/static/brand/charms/sticky_note_green.png",
+    "yellow": "/static/brand/charms/sticky_note_yellow.png",
+    "pink": "/static/brand/charms/sticky_note_pink.png",
+    "purple": "/static/brand/charms/sticky_note_purple.png"
+   }
+  },
+  {
+   "type": "wallet",
+   "w": 416,
+   "h": 492,
+   "colours": {
+    "blue": "/static/brand/charms/wallet_blue.png",
+    "green": "/static/brand/charms/wallet_green.png",
+    "yellow": "/static/brand/charms/wallet_yellow.png",
+    "pink": "/static/brand/charms/wallet_pink.png",
+    "purple": "/static/brand/charms/wallet_purple.png"
+   }
+  },
+  {
+   "type": "stamp_doc",
+   "w": 516,
+   "h": 464,
+   "colours": {
+    "blue": "/static/brand/charms/stamp_doc_blue.png",
+    "green": "/static/brand/charms/stamp_doc_green.png",
+    "yellow": "/static/brand/charms/stamp_doc_yellow.png",
+    "pink": "/static/brand/charms/stamp_doc_pink.png",
+    "purple": "/static/brand/charms/stamp_doc_purple.png"
+   }
+  },
+  {
+   "type": "mailbox",
+   "w": 424,
+   "h": 408,
+   "colours": {
+    "blue": "/static/brand/charms/mailbox_blue.png",
+    "green": "/static/brand/charms/mailbox_green.png",
+    "yellow": "/static/brand/charms/mailbox_yellow.png",
+    "pink": "/static/brand/charms/mailbox_pink.png",
+    "purple": "/static/brand/charms/mailbox_purple.png"
+   }
+  },
+  {
+   "type": "magnet",
+   "w": 400,
+   "h": 324,
+   "colours": {
+    "blue": "/static/brand/charms/magnet_blue.png",
+    "green": "/static/brand/charms/magnet_green.png",
+    "yellow": "/static/brand/charms/magnet_yellow.png",
+    "pink": "/static/brand/charms/magnet_pink.png",
+    "purple": "/static/brand/charms/magnet_purple.png"
+   }
+  },
+  {
+   "type": "sold",
+   "w": 368,
+   "h": 340,
+   "colours": {
+    "blue": "/static/brand/charms/sold_blue.png",
+    "green": "/static/brand/charms/sold_green.png",
+    "yellow": "/static/brand/charms/sold_yellow.png",
+    "pink": "/static/brand/charms/sold_pink.png",
+    "purple": "/static/brand/charms/sold_purple.png"
+   }
+  },
+  {
+   "type": "planet",
+   "w": 424,
+   "h": 308,
+   "colours": {
+    "blue": "/static/brand/charms/planet_blue.png",
+    "green": "/static/brand/charms/planet_green.png",
+    "yellow": "/static/brand/charms/planet_yellow.png",
+    "pink": "/static/brand/charms/planet_pink.png",
+    "purple": "/static/brand/charms/planet_purple.png"
+   }
+  },
+  {
+   "type": "inbox",
+   "w": 456,
+   "h": 352,
+   "colours": {
+    "blue": "/static/brand/charms/inbox_blue.png",
+    "green": "/static/brand/charms/inbox_green.png",
+    "yellow": "/static/brand/charms/inbox_yellow.png",
+    "pink": "/static/brand/charms/inbox_pink.png",
+    "purple": "/static/brand/charms/inbox_purple.png"
+   }
+  },
+  {
+   "type": "parachute",
+   "w": 328,
+   "h": 400,
+   "colours": {
+    "blue": "/static/brand/charms/parachute_blue.png",
+    "green": "/static/brand/charms/parachute_green.png",
+    "yellow": "/static/brand/charms/parachute_yellow.png",
+    "pink": "/static/brand/charms/parachute_pink.png",
+    "purple": "/static/brand/charms/parachute_purple.png"
+   }
+  },
+  {
+   "type": "drum",
+   "w": 356,
+   "h": 344,
+   "colours": {
+    "blue": "/static/brand/charms/drum_blue.png",
+    "green": "/static/brand/charms/drum_green.png",
+    "yellow": "/static/brand/charms/drum_yellow.png",
+    "pink": "/static/brand/charms/drum_pink.png",
+    "purple": "/static/brand/charms/drum_purple.png"
+   }
+  },
+  {
+   "type": "globe",
+   "w": 320,
+   "h": 332,
+   "colours": {
+    "blue": "/static/brand/charms/globe_blue.png",
+    "green": "/static/brand/charms/globe_green.png",
+    "yellow": "/static/brand/charms/globe_yellow.png",
+    "pink": "/static/brand/charms/globe_pink.png",
+    "purple": "/static/brand/charms/globe_purple.png"
+   }
+  },
+  {
+   "type": "camera",
+   "w": 316,
+   "h": 316,
+   "colours": {
+    "blue": "/static/brand/charms/camera_blue.png",
+    "green": "/static/brand/charms/camera_green.png",
+    "yellow": "/static/brand/charms/camera_yellow.png",
+    "pink": "/static/brand/charms/camera_pink.png",
+    "purple": "/static/brand/charms/camera_purple.png"
+   }
+  },
+  {
+   "type": "gift",
+   "w": 416,
+   "h": 424,
+   "colours": {
+    "blue": "/static/brand/charms/gift_blue.png",
+    "green": "/static/brand/charms/gift_green.png",
+    "yellow": "/static/brand/charms/gift_yellow.png",
+    "pink": "/static/brand/charms/gift_pink.png",
+    "purple": "/static/brand/charms/gift_purple.png"
+   }
+  },
+  {
+   "type": "checkbox",
+   "w": 316,
+   "h": 316,
+   "colours": {
+    "blue": "/static/brand/charms/checkbox_blue.png",
+    "green": "/static/brand/charms/checkbox_green.png",
+    "yellow": "/static/brand/charms/checkbox_yellow.png",
+    "pink": "/static/brand/charms/checkbox_pink.png",
+    "purple": "/static/brand/charms/checkbox_purple.png"
+   }
+  },
+  {
+   "type": "shield",
+   "w": 340,
+   "h": 396,
+   "colours": {
+    "blue": "/static/brand/charms/shield_blue.png",
+    "green": "/static/brand/charms/shield_green.png",
+    "yellow": "/static/brand/charms/shield_yellow.png",
+    "pink": "/static/brand/charms/shield_pink.png",
+    "purple": "/static/brand/charms/shield_purple.png"
+   }
+  },
+  {
+   "type": "bank",
+   "w": 480,
+   "h": 436,
+   "colours": {
+    "blue": "/static/brand/charms/bank_blue.png",
+    "green": "/static/brand/charms/bank_green.png",
+    "yellow": "/static/brand/charms/bank_yellow.png",
+    "pink": "/static/brand/charms/bank_pink.png",
+    "purple": "/static/brand/charms/bank_purple.png"
+   }
+  },
+  {
+   "type": "package",
+   "w": 356,
+   "h": 356,
+   "colours": {
+    "blue": "/static/brand/charms/package_blue.png",
+    "green": "/static/brand/charms/package_green.png",
+    "yellow": "/static/brand/charms/package_yellow.png",
+    "pink": "/static/brand/charms/package_pink.png",
+    "purple": "/static/brand/charms/package_purple.png"
+   }
+  }
+ ],
+ "illustrations": [
+  {
+   "id": "illus_infinity_phone_blue",
+   "src": "/static/brand/illus/illus_infinity_phone_blue.png",
+   "w": 837,
+   "h": 458,
+   "tags": [
+    "phone",
+    "mobile",
+    "bell",
+    "check"
+   ],
+   "ribbon": "blue"
+  },
+  {
+   "id": "illus_infinity_phone_sky",
+   "src": "/static/brand/illus/illus_infinity_phone_sky.png",
+   "w": 837,
+   "h": 458,
+   "tags": [
+    "phone",
+    "mobile",
+    "bell",
+    "check"
+   ],
+   "ribbon": "sky"
+  },
+  {
+   "id": "illus_loop_bell_blue",
+   "src": "/static/brand/illus/illus_loop_bell_blue.png",
+   "w": 581,
+   "h": 549,
+   "tags": [
+    "bell",
+    "clock",
+    "reminder"
+   ],
+   "ribbon": "blue"
+  },
+  {
+   "id": "illus_loop_bell_sky",
+   "src": "/static/brand/illus/illus_loop_bell_sky.png",
+   "w": 581,
+   "h": 549,
+   "tags": [
+    "bell",
+    "clock",
+    "reminder"
+   ],
+   "ribbon": "sky"
+  },
+  {
+   "id": "illus_loop_coins_blue",
+   "src": "/static/brand/illus/illus_loop_coins_blue.png",
+   "w": 638,
+   "h": 631,
+   "tags": [
+    "coins",
+    "money",
+    "wallet",
+    "chart"
+   ],
+   "ribbon": "blue"
+  },
+  {
+   "id": "illus_loop_coins_sky",
+   "src": "/static/brand/illus/illus_loop_coins_sky.png",
+   "w": 638,
+   "h": 631,
+   "tags": [
+    "coins",
+    "money",
+    "wallet",
+    "chart"
+   ],
+   "ribbon": "sky"
+  },
+  {
+   "id": "illus_wave_bulb_blue",
+   "src": "/static/brand/illus/illus_wave_bulb_blue.png",
+   "w": 680,
+   "h": 524,
+   "tags": [
+    "bulb",
+    "idea",
+    "gauge",
+    "chart"
+   ],
+   "ribbon": "blue"
+  },
+  {
+   "id": "illus_wave_bulb_sky",
+   "src": "/static/brand/illus/illus_wave_bulb_sky.png",
+   "w": 680,
+   "h": 487,
+   "tags": [
+    "bulb",
+    "idea",
+    "gauge",
+    "chart"
+   ],
+   "ribbon": "sky"
+  },
+  {
+   "id": "illus_wave_coin_blue",
+   "src": "/static/brand/illus/illus_wave_coin_blue.png",
+   "w": 999,
+   "h": 571,
+   "tags": [
+    "coin",
+    "money",
+    "folder"
+   ],
+   "ribbon": "blue"
+  },
+  {
+   "id": "illus_wave_coin_sky",
+   "src": "/static/brand/illus/illus_wave_coin_sky.png",
+   "w": 999,
+   "h": 571,
+   "tags": [
+    "coin",
+    "money",
+    "folder"
+   ],
+   "ribbon": "sky"
+  },
+  {
+   "id": "illus_wave_invoice_blue",
+   "src": "/static/brand/illus/illus_wave_invoice_blue.png",
+   "w": 714,
+   "h": 473,
+   "tags": [
+    "invoice",
+    "document",
+    "stamp",
+    "percent",
+    "calendar"
+   ],
+   "ribbon": "blue"
+  },
+  {
+   "id": "illus_vacation",
+   "src": "/static/brand/illus/illus_vacation.svg",
+   "w": 325,
+   "h": 258,
+   "tags": [
+    "vacation",
+    "holiday",
+    "deckchair",
+    "calendar",
+    "plane",
+    "travel"
+   ],
+   "ribbon": "pink"
+  },
+  {
+   "id": "illus_tax_return",
+   "src": "/static/brand/illus/illus_tax_return.svg",
+   "w": 355,
+   "h": 282,
+   "tags": [
+    "tax",
+    "coins",
+    "percent",
+    "calendar",
+    "bell",
+    "heart"
+   ],
+   "ribbon": "sky"
+  },
+  {
+   "id": "illus_anywhere_access",
+   "src": "/static/brand/illus/illus_anywhere_access.svg",
+   "w": 405,
+   "h": 393,
+   "tags": [
+    "anywhere",
+    "phone",
+    "bell",
+    "link",
+    "globe"
+   ],
+   "ribbon": "pink"
+  }
+ ],
+ "devices": [
+  {
+   "id": "device_tablet_kitchen",
+   "src": "/static/brand/devices/device_tablet_kitchen.png",
+   "w": 1600,
+   "h": 893,
+   "tags": [
+    "tablet",
+    "kitchen",
+    "hands",
+    "dashboard",
+    "photo"
+   ],
+   "cutout": false
+  },
+  {
+   "id": "device_phone_hand_payments",
+   "src": "/static/brand/devices/device_phone_hand_payments.png",
+   "w": 1161,
+   "h": 1600,
+   "tags": [
+    "phone",
+    "hand",
+    "payments"
+   ],
+   "cutout": true
+  },
+  {
+   "id": "device_phone_hand_balance",
+   "src": "/static/brand/devices/device_phone_hand_balance.png",
+   "w": 1160,
+   "h": 1600,
+   "tags": [
+    "phone",
+    "hand",
+    "balance"
+   ],
+   "cutout": true
+  },
+  {
+   "id": "device_laptop_overview",
+   "src": "/static/brand/devices/device_laptop_overview.png",
+   "w": 857,
+   "h": 898,
+   "tags": [
+    "laptop",
+    "hands",
+    "overview"
+   ],
+   "cutout": true
+  },
+  {
+   "id": "device_laptop_welcome",
+   "src": "/static/brand/devices/device_laptop_welcome.png",
+   "w": 948,
+   "h": 898,
+   "tags": [
+    "laptop",
+    "hands",
+    "welcome"
+   ],
+   "cutout": true
+  },
+  {
+   "id": "device_tablet_hands_account",
+   "src": "/static/brand/devices/device_tablet_hands_account.png",
+   "w": 864,
+   "h": 967,
+   "tags": [
+    "tablet",
+    "hands",
+    "account"
+   ],
+   "cutout": true
+  },
+  {
+   "id": "device_tablet_hands_payments",
+   "src": "/static/brand/devices/device_tablet_hands_payments.png",
+   "w": 864,
+   "h": 967,
+   "tags": [
+    "tablet",
+    "hands",
+    "payments"
+   ],
+   "cutout": true
+  }
+ ],
+ "logo": {
+  "mask": "/static/brand/logo/logo_mask.png",
+  "navy": "/static/brand/logo/logo_navy.png",
+  "sky": "/static/brand/logo/logo_sky.png",
+  "white": "/static/brand/logo/logo_white.png",
+  "w": 764,
+  "h": 216
+ }
+}

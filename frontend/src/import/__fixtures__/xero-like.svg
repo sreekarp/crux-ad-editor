@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1080" height="1350" viewBox="0 0 1080 1350">
+  <title>Xero-like test ad (import fixture)</title>
+  <defs>
+    <linearGradient id="dot" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3ECCFF"/>
+      <stop offset="1" stop-color="#1F65D6"/>
+    </linearGradient>
+  </defs>
+  <rect id="Background" width="1080" height="1350" fill="#000856"/>
+  <path id="Sky bloom" fill="#3ECCFF" d="M1080 640 C 940 600 820 700 780 840 C 740 980 600 1040 470 1110 C 360 1170 300 1260 290 1350 L 1080 1350 Z"/>
+  <path id="Blue bloom" fill="#1F65D6" d="M0 1350 L0 1080 C 120 1040 220 1120 260 1350 Z"/>
+  <circle cx="930" cy="190" r="70" fill="url(#dot)"/>
+  <g id="Headline group" transform="translate(64 96) scale(1.25)">
+    <text id="Headline" font-family="'National 2 Condensed', 'Arial Narrow', sans-serif" font-weight="700" font-size="88" fill="#FFFFFF">
+      <tspan x="0" y="80">Cash flow without</tspan>
+      <tspan x="0" y="166">the suspense.</tspan>
+    </text>
+  </g>
+  <text id="Sub" x="64" y="420" font-family="Inter, Arial, sans-serif" font-weight="500" font-size="34" fill="#FFFFFF">Invoices, payments and payroll in one place.</text>
+  <rect id="CTA box" x="64" y="480" width="300" height="84" rx="12" fill="#3ECCFF"/>
+  <text id="CTA" x="214" y="533" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="700" font-size="32" fill="#000856">Try Xero free</text>
+  <image id="Coin" x="640" y="760" width="320" height="320" xlink:href="data:image/png;base64,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"/>
+  <text id="Disclaimer" x="64" y="1290" font-family="Inter, Arial, sans-serif" font-size="24" fill="#FFFFFF" opacity="0.8">Terms apply.</text>
+  <text id="Hidden note" x="64" y="700" display="none" font-family="Inter" font-size="40" fill="#FFFFFF">Hidden note</text>
+</svg>

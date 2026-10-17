@@ -1,0 +1,716 @@
+[
+ {
+  "url": "/static/gen/bank/florist_2.png",
+  "tag": "florist",
+  "prompt": "cheerful Black man florist in a green apron carrying buckets of fresh tulips outside his corner flower shop",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.5,
+   0.2
+  ],
+  "box": [
+   0.21,
+   0.0,
+   0.81,
+   1.0
+  ]
+ },
+ {
+  "url": "/static/gen/bank/florist_1.png",
+  "tag": "florist",
+  "prompt": "smiling Asian woman florist in her 30s arranging a bouquet of peonies at the counter of her flower shop",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.458,
+   0.25
+  ],
+  "box": [
+   0.3,
+   0.0,
+   0.8,
+   0.85
+  ]
+ },
+ {
+  "url": "/static/gen/bank/cafe_1.png",
+  "tag": "cafe",
+  "prompt": "smiling Latina cafe owner in her 30s handing a flat white across the counter of her cosy neighbourhood cafe",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.401,
+   0.302
+  ],
+  "box": [
+   0.215,
+   0.0,
+   0.685,
+   0.85
+  ]
+ },
+ {
+  "url": "/static/gen/bank/cafe_3.png",
+  "tag": "cafe",
+  "prompt": "South Asian woman cafe owner in her 50s arranging pastries in the window display of her small cafe",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.575,
+   0.225
+  ],
+  "box": [
+   0.0,
+   0.0,
+   0.7,
+   0.85
+  ]
+ },
+ {
+  "url": "/static/gen/bank/florist_3.png",
+  "tag": "florist",
+  "prompt": "older white woman florist with grey hair wrapping a bouquet in brown paper in a sunlit florist studio",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.556,
+   0.222
+  ],
+  "box": [
+   0.12,
+   0.0,
+   0.88,
+   0.95
+  ]
+ },
+ {
+  "url": "/static/gen/bank/cafe_2.png",
+  "tag": "cafe",
+  "prompt": "young bearded man barista laughing while tamping espresso behind a busy cafe counter, chalkboard blurred",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.625,
+   0.2
+  ],
+  "box": [
+   0.3,
+   0.0,
+   0.8,
+   1.0
+  ]
+ },
+ {
+  "url": "/static/gen/bank/bakery_1.png",
+  "tag": "bakery",
+  "prompt": "smiling baker in her 40s pulling a tray of golden sourdough loaves from the oven in a small bakery",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.3,
+   0.25
+  ],
+  "box": [
+   0.13,
+   0.0,
+   0.999,
+   0.999
+  ]
+ },
+ {
+  "url": "/static/gen/bank/bakery_2.png",
+  "tag": "bakery",
+  "prompt": "young Black man baker dusting flour over croissant dough on a wooden bench in a family bakery",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.555,
+   0.222
+  ],
+  "box": [
+   0.2,
+   0.0,
+   0.75,
+   0.85
+  ]
+ },
+ {
+  "url": "/static/gen/bank/bakery_3.png",
+  "tag": "bakery",
+  "prompt": "older Italian baker with flour on his apron shaping bread rolls, morning light through the bakery window",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.425,
+   0.225
+  ],
+  "box": [
+   0.17,
+   0.0,
+   0.64,
+   0.85
+  ]
+ },
+ {
+  "url": "/static/gen/bank/boutique_1.png",
+  "tag": "boutique",
+  "prompt": "smiling woman owner folding knitwear at the counter of her independent clothing boutique",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.519,
+   0.256
+  ],
+  "box": [
+   0.35,
+   0.0,
+   0.8,
+   0.85
+  ]
+ },
+ {
+  "url": "/static/gen/bank/boutique_2.png",
+  "tag": "boutique",
+  "prompt": "stylish young man owner adjusting a jacket on a rail in his menswear boutique, warm shop lighting",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.375,
+   0.25
+  ],
+  "box": [
+   0.25,
+   0.02,
+   0.75,
+   0.98
+  ]
+ },
+ {
+  "url": "/static/gen/bank/boutique_3.png",
+  "tag": "boutique",
+  "prompt": "Black woman boutique owner in her 40s tagging new stock among colourful dresses in her shop",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.625,
+   0.2
+  ],
+  "box": [
+   0.3,
+   0.0,
+   0.8,
+   0.85
+  ]
+ },
+ {
+  "url": "/static/gen/bank/maker_1.png",
+  "tag": "maker",
+  "prompt": "smiling woman ceramicist in her 30s glazing handmade mugs at a workbench in her pottery studio",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.455,
+   0.222
+  ],
+  "box": [
+   0.1,
+   0.0,
+   0.6,
+   0.85
+  ]
+ },
+ {
+  "url": "/static/gen/bank/maker_2.png",
+  "tag": "maker",
+  "prompt": "young man leather maker stitching a wallet by hand at his workshop table, tools neatly arranged",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.575,
+   0.2
+  ],
+  "box": [
+   0.25,
+   0.0,
+   0.75,
+   0.8
+  ]
+ },
+ {
+  "url": "/static/gen/bank/maker_3.png",
+  "tag": "maker",
+  "prompt": "Asian woman milliner shaping felt over a wooden hat block in her sunny craft studio",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.625,
+   0.25
+  ],
+  "box": [
+   0.26,
+   0.0,
+   0.78,
+   0.85
+  ]
+ },
+ {
+  "url": "/static/gen/bank/woodworker_1.png",
+  "tag": "woodworker",
+  "prompt": "bearded woodworker in his 40s planing an oak plank at his bench, wood shavings curling, warm workshop light",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.5,
+   0.2
+  ],
+  "box": [
+   0.08,
+   0.0,
+   0.7,
+   0.85
+  ]
+ },
+ {
+  "url": "/static/gen/bank/woodworker_2.png",
+  "tag": "woodworker",
+  "prompt": "young woman carpenter measuring a table top with a pencil behind her ear in a small furniture workshop",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.455,
+   0.195
+  ],
+  "box": [
+   0.1,
+   0.0,
+   0.75,
+   0.85
+  ]
+ },
+ {
+  "url": "/static/gen/bank/woodworker_3.png",
+  "tag": "woodworker",
+  "prompt": "older Maori man woodworker sanding a handmade chair in his timber workshop, sawdust in the light",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.5,
+   0.25
+  ],
+  "box": [
+   0.21,
+   0.0,
+   0.99,
+   0.99
+  ]
+ },
+ {
+  "url": "/static/gen/bank/tradie_1.png",
+  "tag": "tradie",
+  "prompt": "smiling plumber in work overalls with a toolbox standing by his open work van on a suburban street",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.6,
+   0.25
+  ],
+  "box": [
+   0.25,
+   0.0,
+   0.75,
+   1.0
+  ]
+ },
+ {
+  "url": "/static/gen/bank/tradie_2.png",
+  "tag": "tradie",
+  "prompt": "young woman electrician in hi-vis checking a fuse board in a bright home renovation",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.5,
+   0.25
+  ],
+  "box": [
+   0.28,
+   0.02,
+   0.92,
+   0.98
+  ]
+ },
+ {
+  "url": "/static/gen/bank/tradie_3.png",
+  "tag": "tradie",
+  "prompt": "middle-aged Pacific Islander landscaper resting on a spade in a freshly planted garden, smiling",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.375,
+   0.25
+  ],
+  "box": [
+   0.13,
+   0.0,
+   0.56,
+   1.0
+  ]
+ },
+ {
+  "url": "/static/gen/bank/builder_1.png",
+  "tag": "builder",
+  "prompt": "smiling builder in a work shirt holding rolled-up plans on a residential construction site",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.375,
+   0.25
+  ],
+  "box": [
+   0.16,
+   0.02,
+   0.74,
+   1.0
+  ]
+ },
+ {
+  "url": "/static/gen/bank/builder_2.png",
+  "tag": "builder",
+  "prompt": "woman site manager in a hard hat and hi-vis vest reviewing a clipboard beside timber framing",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.571,
+   0.255
+  ],
+  "box": [
+   0.3,
+   0.0,
+   0.85,
+   1.0
+  ]
+ },
+ {
+  "url": "/static/gen/bank/builder_3.png",
+  "tag": "builder",
+  "prompt": "older builder with a tool belt laughing with an apprentice on a sunny building site",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.5,
+   0.3
+  ],
+  "box": [
+   0.0,
+   0.0,
+   0.999,
+   0.998
+  ]
+ },
+ {
+  "url": "/static/gen/bank/beekeeper_1.png",
+  "tag": "beekeeper",
+  "prompt": "beekeeper in a veil holding up a honeycomb frame covered in bees, golden afternoon light",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.25,
+   0.3
+  ],
+  "box": [
+   0.0,
+   0.0,
+   0.9,
+   1.0
+  ]
+ },
+ {
+  "url": "/static/gen/bank/beekeeper_2.png",
+  "tag": "beekeeper",
+  "prompt": "smiling young woman beekeeper checking a hive in a wildflower meadow, veil pushed back",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.402,
+   0.258
+  ],
+  "box": [
+   0.12,
+   0.0,
+   0.84,
+   0.96
+  ]
+ },
+ {
+  "url": "/static/gen/bank/beekeeper_3.png",
+  "tag": "beekeeper",
+  "prompt": "older man beekeeper pouring honey into jars at a wooden table in his farm shed",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.592,
+   0.285
+  ],
+  "box": [
+   0.12,
+   0.0,
+   0.8,
+   0.9
+  ]
+ },
+ {
+  "url": "/static/gen/bank/foodtruck_1.png",
+  "tag": "foodtruck",
+  "prompt": "smiling Black man with a beard leaning on the counter of his food truck by the beach, arms crossed",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.333,
+   0.333
+  ],
+  "box": [
+   0.0,
+   0.0,
+   0.52,
+   0.95
+  ]
+ },
+ {
+  "url": "/static/gen/bank/foodtruck_3.png",
+  "tag": "foodtruck",
+  "prompt": "Asian man chef plating noodles inside his food truck, warm evening market lights behind",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.458,
+   0.25
+  ],
+  "box": [
+   0.03,
+   0.0,
+   0.56,
+   0.85
+  ]
+ },
+ {
+  "url": "/static/gen/bank/foodtruck_2.png",
+  "tag": "foodtruck",
+  "prompt": "young Latina woman handing a taco through the window of her colourful food truck at a street market",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.365,
+   0.235
+  ],
+  "box": [
+   0.12,
+   0.0,
+   0.56,
+   0.85
+  ]
+ },
+ {
+  "url": "/static/gen/bank/salon_1.png",
+  "tag": "salon",
+  "prompt": "smiling hairdresser in her 30s styling a client's hair in a bright independent salon",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.375,
+   0.25
+  ],
+  "box": [
+   0.25,
+   0.0,
+   0.75,
+   1.0
+  ]
+ },
+ {
+  "url": "/static/gen/bank/salon_2.png",
+  "tag": "salon",
+  "prompt": "barber with tattoos trimming a customer's beard in a vintage barbershop, laughing",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.5,
+   0.4
+  ],
+  "box": [
+   0.12,
+   0.0,
+   0.92,
+   1.0
+  ]
+ },
+ {
+  "url": "/static/gen/bank/farmer_1.png",
+  "tag": "farmer",
+  "prompt": "smiling farmer in her 50s holding a crate of fresh vegetables in a green field at golden hour",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.333,
+   0.25
+  ],
+  "box": [
+   0.08,
+   0.0,
+   0.82,
+   1.0
+  ]
+ },
+ {
+  "url": "/static/gen/bank/salon_3.png",
+  "tag": "salon",
+  "prompt": "Black woman salon owner arranging hair products on shelves in her airy salon",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.5,
+   0.25
+  ],
+  "box": [
+   0.3,
+   0.0,
+   0.85,
+   1.0
+  ]
+ },
+ {
+  "url": "/static/gen/bank/farmer_2.png",
+  "tag": "farmer",
+  "prompt": "young man farmer leaning on a gate with sheep in the paddock behind him, morning light",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.625,
+   0.25
+  ],
+  "box": [
+   0.4,
+   0.0,
+   0.95,
+   1.0
+  ]
+ },
+ {
+  "url": "/static/gen/bank/farmer_3.png",
+  "tag": "farmer",
+  "prompt": "older couple of orchard owners picking apples together from a tree, smiling",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.4,
+   0.3
+  ],
+  "box": [
+   0.08,
+   0.0,
+   0.8,
+   1.0
+  ]
+ },
+ {
+  "url": "/static/gen/bank/homeoffice_1.png",
+  "tag": "homeoffice",
+  "prompt": "small-business owner in her 40s working happily on paperwork at the kitchen table at home, dog at her feet",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.5,
+   0.25
+  ],
+  "box": [
+   0.28,
+   0.0,
+   0.75,
+   0.95
+  ]
+ },
+ {
+  "url": "/static/gen/bank/homeoffice_2.png",
+  "tag": "homeoffice",
+  "prompt": "two women business partners laughing at a kitchen table at home with coffee mugs and notebooks",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.5,
+   0.3
+  ],
+  "box": [
+   0.0,
+   0.0,
+   1.0,
+   0.9
+  ]
+ },
+ {
+  "url": "/static/gen/bank/laptop_1.png",
+  "tag": "laptop",
+  "prompt": "close-up of hands typing on a laptop on a wooden desk beside a coffee cup and a notebook, screen facing away",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.571,
+   0.222
+  ],
+  "box": [
+   0.0,
+   0.0,
+   0.9,
+   0.95
+  ]
+ },
+ {
+  "url": "/static/gen/bank/laptop_2.png",
+  "tag": "laptop",
+  "prompt": "smiling woman shop owner using a laptop on the shop counter, laptop screen turned away from the camera",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.5,
+   0.3
+  ],
+  "box": [
+   0.26,
+   0.0,
+   0.85,
+   0.85
+  ]
+ },
+ {
+  "url": "/static/gen/bank/laptop_3.png",
+  "tag": "laptop",
+  "prompt": "man in an apron checking a laptop at a workshop bench, screen facing away, warm daylight",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.5,
+   0.25
+  ],
+  "box": [
+   0.15,
+   0.0,
+   0.9,
+   0.9
+  ]
+ },
+ {
+  "url": "/static/gen/bank/homeoffice_3.png",
+  "tag": "homeoffice",
+  "prompt": "young man freelancer in a cosy living room with a cup of tea, notebook on his knee, smiling",
+  "w": 1536,
+  "h": 1024,
+  "focus": [
+   0.4,
+   0.25
+  ],
+  "box": [
+   0.05,
+   0.03,
+   0.68,
+   0.99
+  ]
+ }
+]

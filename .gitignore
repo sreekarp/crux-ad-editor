@@ -1,0 +1,19 @@
+.env
+.env.*
+node_modules/
+__pycache__/
+.venv/
+# generated photos are throwaway, but the curated photo bank ships with the app
+backend/static/gen/*
+!backend/static/gen/bank/
+backend/static/uploads/
+# the brief PDF contains the hackathon API keys
+getcrux-ai-hackathon-challenge-brief.pdf
+*.log
+dist/
+.superpowers/
+.claude/
+# Office lock files (e.g. while the deck is open in PowerPoint)
+~$*
+!.env.example
+*.tsbuildinfo

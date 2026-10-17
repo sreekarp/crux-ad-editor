@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:html="http://www.w3.org/1999/xhtml" viewBox="0 0 400 500" onload="window.__pwned='onload'">
+  <style>@import url(https://evil.example/x.css); svg { background: url(https://evil.example/bg.png) } text { fill: #000856 } body { display: none !important }</style>
+  <script>window.__pwned = 'script'</script>
+  <html:script>window.__pwned = 'html-script'</html:script>
+  <rect width="400" height="500" fill="#FFFFFF" onclick="window.__pwned='click'"/>
+  <foreignObject width="100" height="100"><div xmlns="http://www.w3.org/1999/xhtml"><img src="https://evil.example/fo.png" onerror="window.__pwned='fo'"/></div></foreignObject>
+  <image x="0" y="0" width="50" height="50" href="https://evil.example/track.png"/>
+  <image x="60" y="0" width="50" height="50" xlink:href="javascript:window.__pwned='img'"/>
+  <use href="https://evil.example/sprite.svg#icon"/>
+  <rect x="20" y="300" width="200" height="60" fill="url(https://evil.example/paint.svg#p)"/>
+  <a href="javascript:window.__pwned='link'"><text x="20" y="80" font-size="40" font-family="Inter">Click me</text></a>
+  <set attributeName="href" to="javascript:window.__pwned='set'"/>
+  <animate attributeName="x" from="0" to="10" dur="1s"/>
+  <text x="20" y="200" font-size="28" font-family="Inter" style="fill: #FF719B; background-image: url(https://evil.example/s.png)">Pink text</text>
+</svg>
