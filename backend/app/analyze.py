@@ -49,6 +49,16 @@ def _data_url(img: Image.Image, max_side: int = 1024) -> str:
     return "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode()
 
 
+def upload_data_url(url: str) -> str:
+    """/static/... upload -> JPEG data URL for a vision call (raises if the file is missing)."""
+    return _data_url(Image.open(local_path(url)))
+
+
+def vision_supported(tier: str) -> bool:
+    """False once a tier has rejected image input (cached by analyze)."""
+    return _vision.get(tier) is not False
+
+
 async def analyze(url: str) -> dict:
     img = Image.open(local_path(url))
     pal = palette(img)

@@ -248,30 +248,61 @@ function say(text: string, extra: Partial<Parameters<ReturnType<typeof useEditor
 /** Agent Mode (spec §9): design id -> the subject its concept was written for (opts.subjects[i]); never by order. */
 export const designSubjects = new Map<string, string>();
 
-/** New design(s): POST /api/design/concepts -> photos -> buildDesign -> autoFix -> add as one batch. */
+/** What runConcepts made. Every caller gets it; Agent Mode's quiet calls show it on the Producer card instead of a reply. */
+export interface ConceptsOutcome {
+  /** The backend's reply text (posted as its own chat bubble unless quiet). */
+  reply: string;
+  /** Built designs in order, with the concept slots each was laid out from and its subject (Agent Mode), if any. */
+  designs: { id: string; slots: Slots; subject?: string }[];
+  /** Designs whose generated photo failed and fell back to a bank photo. */
+  photoFallback: string[];
+  /** Set when nothing was built (quiet calls return it instead of posting it). */
+  error?: string;
+}
+
+/** New design(s): POST /api/design/concepts -> photos -> buildDesign -> autoFix -> add as one batch.
+ *  opts.quiet (Agent Mode): no chat bubble of its own — progress goes to opts.onProgress, the reply and any error come
+ *  back in the returned outcome. Without it (classic) behaviour is unchanged. */
 export async function runConcepts(
   prompt: string,
   count: number,
-  opts: { referenceId?: string; reference?: Slots; brief?: string; size?: Size; subjects?: string[]; theme?: string } = {},
-) {
+  opts: {
+    referenceId?: string;
+    reference?: Slots;
+    referenceImage?: string;
+    brief?: string;
+    size?: Size;
+    subjects?: string[];
+    theme?: string;
+    quiet?: boolean;
+    onProgress?: (progress: string | null) => void;
+  } = {},
+): Promise<ConceptsOutcome> {
+  const { quiet, onProgress, ...req } = opts;
+  const out: ConceptsOutcome = { reply: '', designs: [], photoFallback: [] };
   const n = Math.max(1, Math.min(6, count));
-  const msg = say('', { progress: `Writing ${n} concept${n > 1 ? 's' : ''}…` });
+  const first = `Writing ${n} concept${n > 1 ? 's' : ''}…`;
+  const msg = quiet ? null : say('', { progress: first });
+  const progress = (p: string | null) => (msg ? S().updateMsg(msg, { progress: p }) : onProgress?.(p));
+  const post = (patch: { text: string; progress: string | null; error?: boolean }) => (msg ? S().updateMsg(msg, patch) : onProgress?.(patch.progress));
+  if (quiet) onProgress?.(first);
   S().set({ busy: true });
   try {
     const asked = sizeCommand(prompt); // "Story ad: …" -> new designs in 9:16
-    const size = opts.size ? { ...opts.size } : asked ? { ...SIZES[asked] } : activeSize(); // opts.size: agent planner
-    const res = await api.concepts({ prompt, count: n, size, ...opts });
+    const size = req.size ? { ...req.size } : asked ? { ...SIZES[asked] } : activeSize(); // opts.size: agent planner
+    const res = await api.concepts({ prompt, count: n, size, ...req });
     const concepts = (res.concepts ?? []).slice(0, n);
     if (!concepts.length) throw new Error('The copilot returned no concepts.');
-    S().updateMsg(msg, { progress: 'Laying out designs…' });
+    progress('Laying out designs…');
     const used = new Set<string>();
-    const generate = !!(opts.subjects?.length || opts.theme);
+    const generate = !!(req.subjects?.length || req.theme);
     // One bad concept (engine error) must not sink the whole batch.
     const built = concepts.flatMap((slots, i) => {
       try {
         const b = buildFromSlots(slots, size, used, concepts.length > 1 ? `${slots.headline?.slice(0, 32) ?? 'Concept'} (${i + 1})` : undefined, generate);
-        const subj = opts.subjects?.[i];
+        const subj = req.subjects?.[i];
         if (subj) designSubjects.set(b.design.id, subj);
+        out.designs.push({ id: b.design.id, slots, ...(subj ? { subject: subj } : {}) });
         return [b];
       } catch (e) {
         console.warn('[buildDesign]', e, slots);
@@ -282,13 +313,14 @@ export async function runConcepts(
     S().addDesigns(built.map((b) => b.design), prompt);
     S().set({ busy: false });
     const reply = res.reply || `Here ${concepts.length > 1 ? `are ${concepts.length} concepts` : 'is a concept'}.`;
+    out.reply = reply;
     const toGen = built.filter((b) => b.needsPhoto);
     if (!toGen.length) {
-      S().updateMsg(msg, { text: reply, progress: null });
-      return;
+      post({ text: reply, progress: null });
+      return out;
     }
     let done = 0;
-    S().updateMsg(msg, { text: reply, progress: `Generating photos 0/${toGen.length}…` });
+    post({ text: reply, progress: `Generating photos 0/${toGen.length}…` });
     await Promise.all(
       toGen.map(async ({ design }) => {
         const layer = photoLayers(design)[0];
@@ -305,17 +337,21 @@ export async function runConcepts(
         } catch (e) {
           const fallback = pickBankPhoto(hero.photoTag, used, true);
           setPhoto(design.id, fallback);
+          out.photoFallback.push(design.id);
           console.warn('[photo]', errorMessage(e));
         }
         done++;
-        S().updateMsg(msg, { progress: done < toGen.length ? `Generating photos ${done}/${toGen.length}…` : null });
+        progress(done < toGen.length ? `Generating photos ${done}/${toGen.length}…` : null);
       }),
     );
   } catch (e) {
-    S().updateMsg(msg, { text: `Sorry — I couldn't create that: ${errorMessage(e)}`, progress: null, error: true });
+    out.error = errorMessage(e);
+    if (msg) S().updateMsg(msg, { text: `Sorry — I couldn't create that: ${out.error}`, progress: null, error: true });
+    else onProgress?.(null);
   } finally {
     S().set({ busy: false });
   }
+  return out;
 }
 
 /** Runs photo / pixel_edit ops returned by applyOps. Returns the number of failed ops. */
@@ -560,7 +596,7 @@ export async function fourLikeUpload(url: string, count = 3, brief?: string) {
     }
     S().updateMsg(msg, { progress: null, text: 'Got it — using your image as the reference.' });
     const prompt = `Create ${count} on-brand Xero ads like this uploaded design.${r.texts.length ? ` Text found: ${r.texts.join(' | ')}` : ''}`;
-    await runConcepts(prompt, count, { reference: r.slots, ...(brief ? { brief } : {}) });
+    await runConcepts(prompt, count, { reference: r.slots, referenceImage: url, ...(brief ? { brief } : {}) });
   } catch (e) {
     S().updateMsg(msg, { text: `Analysis failed: ${errorMessage(e)}`, progress: null, error: true });
   }

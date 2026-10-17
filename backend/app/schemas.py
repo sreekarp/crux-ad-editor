@@ -67,6 +67,7 @@ class ConceptsRequest(BaseModel):
     brief: Optional[str] = None
     subjects: Optional[list[str]] = None  # Agent Mode: one hero subject per concept, in order (spec §9)
     theme: Optional[str] = None  # Agent Mode: campaign theme heard in every concept's copy and photo scene
+    referenceImage: Optional[str] = None  # /static/uploads/... of the uploaded ad: tried on the vision tier first
 
 
 class ConceptsResponse(BaseModel):

@@ -28,6 +28,14 @@ export interface AgentStep {
   icon?: string;
   /** Mini chips under the label (the Brand Kit card). */
   chips?: string[];
+  /** Expandable "thinking" behind the card (click to open): what this role saw, decided and why. */
+  thinking?: StepThought[];
+}
+
+/** One titled section of a card's thinking, e.g. { title: 'Round 1 · vision', lines: ['Score 72', 'Head cut by the bloom'] }. */
+export interface StepThought {
+  title: string;
+  lines: string[];
 }
 
 export type AgentRole = 'strategist' | 'producer' | 'art-director';

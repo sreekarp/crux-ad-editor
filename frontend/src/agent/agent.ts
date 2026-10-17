@@ -2,9 +2,11 @@
 // flows, then review the result (review.ts) and offer next steps. Planner down -> the classic regex routing.
 // Every step reports in chat; nothing here throws to the UI and `busy` is always reset.
 import { api, errorMessage, type AnalyzeResult } from '../api';
-import { SIZES, type SizeKey } from '../brand';
+import { ACCENT_COLOURS, CORE_COLOURS, FONTS, SIZES, type SizeKey } from '../brand';
 import { summarizeDesign } from '../design';
-import type { Slots } from '../types';
+import { subjectCoverage } from '../design/frame';
+import { photoShape } from '../lib/photoFocus';
+import type { Design, Manifest, PhotoBankItem, PhotoLayer, RuleId, Slots } from '../types';
 import { getActive, useEditor } from '../editor/store';
 import {
   completeSlots,
@@ -21,10 +23,11 @@ import {
   sendMessageClassic,
   sizeCommand,
   wantsNewDesigns,
+  type ConceptsOutcome,
 } from '../editor/copilot';
 import { agentApi } from './api';
-import { parseDesignPrompt, reviewDesigns, withTimeout, type ReviewResult } from './review';
-import type { AgentQuestion, AgentStep, PlanAction, PlanContext, PlanResponse, PlanStep, SizeKeyLike, StepAction } from './types';
+import { clipWords, parseDesignPrompt, reviewDesigns, withTimeout, type ReviewResult } from './review';
+import type { AgentQuestion, AgentStep, PlanAction, PlanContext, PlanResponse, PlanStep, SizeKeyLike, StepAction, StepThought } from './types';
 
 const S = () => useEditor.getState();
 const say = (text: string, extra: Partial<Parameters<ReturnType<typeof useEditor.getState>['pushMsg']>[0]> = {}) =>
@@ -217,6 +220,173 @@ export function avoidBrief(made: Partial<Slots>[]): string {
 }
 
 // ---------------------------------------------------------------------------------------------
+// Card thinking (click a card to see what that role saw, decided and why). Short plain lines, no JSON.
+
+/** Every rule the brand checker enforces (typed: a new RuleId must be listed here or tsc fails). */
+const BRAND_RULES: Record<RuleId, true> = {
+  palette: true,
+  'text-colour': true,
+  contrast: true,
+  'logo-count': true,
+  'logo-colour': true,
+  'logo-pill': true,
+  'logo-aspect': true,
+  'cta-count': true,
+  'headline-length': true,
+  'headline-punctuation': true,
+  'safe-margin': true,
+  'safe-zone-916': true,
+  'min-font-size': true,
+  disclaimer: true,
+  'photo-treatment': true,
+  'bloom-colours': true,
+  aspect: true,
+  'off-canvas': true,
+};
+
+/** Brand Kit card: what every design is built from (static brand facts + asset counts once the manifest is in). */
+export function brandKitThinking(manifest: Manifest | null, photos = 0): StepThought[] {
+  const lines = [
+    `Palette: ${CORE_COLOURS.join(', ')} + ${ACCENT_COLOURS.length} bloom accents`,
+    `Fonts: ${FONTS.headline} / ${FONTS.body}`,
+    `Rules: ${Object.keys(BRAND_RULES).length} brand rules, checked on every design`,
+  ];
+  if (manifest) {
+    const charms = new Set((manifest.charms ?? []).map((c) => c.type)).size;
+    const blooms = new Set((manifest.blooms ?? []).map((b) => b.shape)).size;
+    lines.push(`Assets: ${charms} charms, ${blooms} blooms, ${photos} photos`);
+  }
+  return [{ title: 'Loaded', lines }];
+}
+
+/** Colourway the user asked for in so many words ("dark version", "make it light"); null = not named. */
+export function lookOf(text: string): 'light' | 'dark' | 'blue' | null {
+  const t = (text ?? '').toLowerCase();
+  const m =
+    /\b(dark|light|blue)\s+(colou?rway|version|theme|mode|background|look|design|ad)s?\b/.exec(t) ??
+    /\b(?:make it|go|in|use|keep it)\s+(?:the\s+)?(dark|light|blue)\b/.exec(t);
+  return m ? (m[1] as 'light' | 'dark' | 'blue') : null;
+}
+
+/** "create · 3 designs · 9:16", "steps · 3 steps", "resize · 9:16", "ask · 2 questions". */
+function actionLine(plan: PlanResponse): string {
+  const n = plan.count;
+  const parts: string[] = [plan.action];
+  if (plan.action === 'create' || plan.action === 'variations') parts.push(`${n} design${n > 1 ? 's' : ''}`);
+  if (plan.action === 'steps') parts.push(`${plan.steps.length} steps`);
+  if (plan.action === 'ask') parts.push(`${plan.questions.length} question${plan.questions.length > 1 ? 's' : ''}`);
+  if (plan.size) parts.push(plan.size);
+  return parts.join(' · ');
+}
+
+/** "Asked: Who is it for? → Tradies" lines for the question round before this plan (answers: question text -> answer;
+ *  "Reply" = one typed answer to several questions; empty = "Just go"). */
+export function askedLines(answers: Record<string, string> | null | undefined, questions: AgentQuestion[] = []): string[] {
+  if (!questions.length && !answers) return [];
+  const entries = Object.entries(answers ?? {}).filter(([, a]) => str(a));
+  if (!entries.length) return questions.length ? [`Asked: ${questions.map((q) => q.q).join(' / ')} → you said "just go", so I used my best guess`] : [];
+  return entries.map(([q, a]) => {
+    const asked = q === 'Reply' && questions.length ? questions.map((x) => x.q).join(' / ') : (questions.find((x) => x.id === q)?.q ?? q);
+    return `Asked: ${clipWords(asked, 80)} → ${clipWords(str(a), 80)}`;
+  });
+}
+
+/** Strategist card: what was understood, the plan, the look/theme/subjects, must-haves, the question round, the hand-off. */
+export function strategistThinking(
+  plan: PlanResponse,
+  ctx: { message?: string; answers?: Record<string, string> | null; questions?: AgentQuestion[] } = {},
+): StepThought[] {
+  const brief = [`Understood: ${clipWords(plan.understanding, 140)}`, `Action: ${actionLine(plan)}`];
+  const look = lookOf(`${ctx.message ?? ''} ${plan.prompt} ${plan.brief ?? ''}`);
+  if (look) brief.push(`Look: ${look} colourway`);
+  if (plan.theme) brief.push(`Theme: ${plan.theme}`);
+  if (plan.subjects.length) brief.push(`Subjects: ${plan.subjects.join(', ')}`);
+  const out: StepThought[] = [{ title: 'Brief', lines: brief }];
+  if (plan.requirements.length) out.push({ title: 'Requirements', lines: plan.requirements.map((r) => clipWords(r, 90)) });
+  const asked = askedLines(ctx.answers, ctx.questions);
+  if (plan.action === 'ask') out.push({ title: 'Questions', lines: plan.questions.map((q) => `Asking: ${q.q} (${q.options.join(' / ')})`) });
+  else if (asked.length) out.push({ title: 'Questions', lines: asked });
+  if (plan.action === 'steps') out.push({ title: 'Steps', lines: plan.steps.map((s, i) => `${i + 1}. ${clipWords(s.label || s.prompt, 80)}`) });
+  const handoff: string[] = [];
+  if (plan.action === 'chat') handoff.push(`Reply: ${clipWords(plan.reply || plan.understanding, 140)}`);
+  else if (plan.action !== 'ask' && plan.action !== 'steps') {
+    handoff.push(`Brief to Producer: ${clipWords(plan.prompt, 140)}`);
+    if (plan.brief) handoff.push(`Facts: ${clipWords(plan.brief, 140)}`);
+  }
+  if (handoff.length) out.push({ title: 'Hand-off', lines: handoff });
+  return out;
+}
+
+const capWord = (s: string) => (s ? s[0].toUpperCase() + s.slice(1) : s);
+const FIT_WORD = { bloom: 'bloom', frame: 'frame', full: 'full frame' } as const;
+
+/** One Producer section per built design: "#1 Card · light" — copy, photo source and fit, visible subject, bloom swap. */
+export function producerSection(
+  index: number,
+  design: Design | null | undefined,
+  made: { slots?: Slots; subject?: string } | undefined,
+  ctx: { bank?: PhotoBankItem[]; fallback?: boolean } = {},
+): StepThought {
+  const s: Partial<Slots> = made?.slots ?? design?.slots ?? {};
+  const title = [`#${index + 1}`, [capWord(s.template ?? ''), s.colourway ?? ''].filter(Boolean).join(' · ')].filter(Boolean).join(' ');
+  const lines: string[] = [];
+  if (s.headline) lines.push(`Headline "${clipWords(s.headline, 80)}"`);
+  if (s.headline2) lines.push(`Second headline "${clipWords(s.headline2, 80)}"`);
+  if (s.sub) lines.push(`Sub "${clipWords(s.sub, 80)}"`);
+  if (s.items?.length) lines.push(`Checklist: ${s.items.map((x) => clipWords(x, 40)).join('; ')}`);
+  if (s.stat) lines.push(`Stat: ${s.stat.label} ${s.stat.value}`);
+  if (s.cta) lines.push(`Button "${clipWords(s.cta, 40)}"`);
+  if (made?.subject) lines.push(`Written for: ${made.subject}`);
+  const layers = design?.layers ?? [];
+  const photo = (layers.find((l) => l.kind === 'photo' && l.role === 'photo') ?? layers.find((l) => l.kind === 'photo')) as PhotoLayer | undefined;
+  if (photo) {
+    const bank = photo.src ? (ctx.bank ?? []).find((p) => p.url === photo.src) : undefined;
+    if (!photo.src) lines.push(photo.status === 'error' ? 'Photo: could not be loaded' : 'Photo: not ready yet');
+    else if (bank || /\/static\/gen\/bank\//.test(photo.src))
+      lines.push(`Photo: bank${bank?.tag ? ` (${bank.tag})` : ''}${ctx.fallback ? ', generating one failed' : ''}`);
+    else lines.push(`Photo: generated, composed for the ${FIT_WORD[photoShape(photo, design ?? undefined).fit ?? 'full']}`);
+    if (photo.src && photo.subjectBox && design) {
+      try {
+        lines.push(`Subject visible: ${Math.round(subjectCoverage(photo, design) * 100)}%`);
+      } catch {
+        /* unknown */
+      }
+    }
+    if (s.bloom && photo.mask && s.bloom !== photo.mask) lines.push(`Bloom: ${s.bloom} → ${photo.mask} (better fit)`);
+  } else if (s.hero?.type === 'device') lines.push(`Hero: device mock-up${s.hero.deviceId ? ` (${s.hero.deviceId})` : ''}`);
+  else if (s.hero?.type === 'illustration') lines.push('Hero: illustration');
+  const charms = (s.charms ?? []).map((c) => c.charm).filter(Boolean);
+  if (charms.length) lines.push(`Charms: ${charms.join(', ')}`);
+  return { title, lines };
+}
+
+/** What createDesigns built, for the Producer card. */
+export interface Built {
+  ids: string[];
+  made: ConceptsOutcome['designs'];
+  fallback: string[];
+  errors: string[];
+  chunks?: number[];
+}
+
+/** Producer card: one section per design (creation order = the Art Director's #1, #2…), then batch notes / errors. */
+export function producerThinking(b: Built, designs: Design[], bank: PhotoBankItem[] = []): StepThought[] {
+  const out = b.ids.map((id, i) =>
+    producerSection(
+      i,
+      designs.find((d) => d.id === id),
+      b.made.find((m) => m.id === id),
+      { bank, fallback: b.fallback.includes(id) },
+    ),
+  );
+  const notes: string[] = [];
+  if (b.chunks && b.chunks.length > 1) notes.push(`Batches: ${b.chunks.join(' + ')}, later batches avoid the first batch's ideas`);
+  for (const e of b.errors) notes.push(`A batch failed: ${clipWords(e, 100)}`);
+  if (notes.length) out.push({ title: 'Notes', lines: notes });
+  return out;
+}
+
+// ---------------------------------------------------------------------------------------------
 // State: one open question round / "what I see" confirmation at a time (keyed by chat message id)
 
 interface PendingAsk {
@@ -228,6 +398,7 @@ interface PendingSee {
   slots: Slots;
   texts: string[];
   plan: PlanResponse;
+  preview: string;
 }
 const asks = new Map<string, PendingAsk>();
 const sees = new Map<string, PendingSee>();
@@ -278,7 +449,8 @@ async function reviewAfter(
   const created = S().designs.filter((d) => !before.has(d.id)).map((d) => d.id);
   if (created.length) return reviewDesigns(created, { rounds: opts.newRounds ?? 2, brief: opts.brief });
   const now = active ? S().designs.find((d) => d.id === active.id) : null;
-  if (active && now && now !== active) return reviewDesigns([active.id], { rounds: opts.editRounds ?? 1, brief: opts.brief });
+  // prev: photo placement only touches photos this edit pushed out of their shape (hand-set crops stay).
+  if (active && now && now !== active) return reviewDesigns([active.id], { rounds: opts.editRounds ?? 1, brief: opts.brief, prev: { [active.id]: active } });
   return [];
 }
 
@@ -297,16 +469,18 @@ export async function withAgentReview(fn: () => unknown, opts: { newRounds?: num
 }
 
 /** Creates `count` designs (1-8). Above CHUNK: chunk 1 first; the rest start as soon as its designs land (not after its
- *  photos), concurrently, with an avoid-list so the set stays diverse. Returns the new design ids. */
+ *  photos), concurrently, with an avoid-list so the set stays diverse. Returns the new design ids + what each call made.
+ *  runConcepts runs quiet: no "Here's your ad" bubble — the Producer card shows progress and the concepts instead. */
 async function createDesigns(
   prompt: string,
   count: number,
-  opts: { referenceId?: string; reference?: Slots; brief?: string; size?: SizeKeyLike | null; subjects?: string[]; theme?: string | null },
-) {
+  opts: { referenceId?: string; reference?: Slots; referenceImage?: string; brief?: string; size?: SizeKeyLike | null; subjects?: string[]; theme?: string | null },
+  onProgress?: (progress: string | null) => void,
+): Promise<Built> {
   const before = ids();
   const created = () => S().designs.filter((d) => !before.has(d.id));
   const { size: key, subjects = [], theme, ...rest } = opts;
-  const base = { ...rest, ...(key ? { size: { ...SIZES[key] } } : {}), ...(theme ? { theme } : {}) };
+  const base = { ...rest, ...(key ? { size: { ...SIZES[key] } } : {}), ...(theme ? { theme } : {}), quiet: true, onProgress };
   const chunks = chunkCounts(count);
   // Subjects split per chunk, in order (chunk k gets the next chunks[k] subjects); absent = old behaviour.
   const subjectsFor = (k: number) => {
@@ -314,10 +488,14 @@ async function createDesigns(
     const sub = subjects.slice(start, start + chunks[k]);
     return sub.length ? { subjects: sub } : {};
   };
-  if (chunks.length === 1) {
-    await runConcepts(prompt, chunks[0], { ...base, ...subjectsFor(0) });
-    return created().map((d) => d.id);
-  }
+  const built = (outs: ConceptsOutcome[]): Built => ({
+    ids: created().map((d) => d.id),
+    made: outs.flatMap((o) => o.designs),
+    fallback: outs.flatMap((o) => o.photoFallback),
+    errors: outs.flatMap((o) => (o.error ? [o.error] : [])),
+    chunks,
+  });
+  if (chunks.length === 1) return built([await runConcepts(prompt, chunks[0], { ...base, ...subjectsFor(0) })]);
   let firstDone = false;
   const first = runConcepts(prompt, chunks[0], { ...base, ...subjectsFor(0) });
   void first.then(
@@ -328,8 +506,7 @@ async function createDesigns(
   while (!firstDone && !created().length && Date.now() - t0 < 200_000) await sleep(250);
   const avoid = avoidBrief(created().map((d) => d.slots ?? {}));
   const brief = [opts.brief, avoid].filter(Boolean).join('\n') || undefined;
-  await Promise.all([first, ...chunks.slice(1).map((n, k) => runConcepts(prompt, n, { ...base, brief, ...subjectsFor(k + 1) }))]);
-  return created().map((d) => d.id);
+  return built(await Promise.all([first, ...chunks.slice(1).map((n, k) => runConcepts(prompt, n, { ...base, brief, ...subjectsFor(k + 1) }))]));
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -343,6 +520,19 @@ const BRAND_KIT: AgentStep = {
   icon: '✦',
   chips: ['Typography', 'Colours', 'Icons', 'Illustrations'],
 };
+/** The Brand Kit card with its thinking (read from the store when the card is posted). */
+const brandKitCard = (): AgentStep => ({ ...BRAND_KIT, thinking: brandKitThinking(S().manifest, S().photos.length) });
+
+/** Producer progress from a quiet runConcepts ("Writing 3 concepts…", "Generating photos 1/3…") on the card's detail. */
+const producerProgress = (msg: string) => (p: string | null) => {
+  if (p) card(msg, { id: 'produce', detail: p });
+};
+
+/** After a quiet build: the Producer card's thinking, and the error in the plan message when nothing was built. */
+function showBuilt(msg: string, b: Built, text: string) {
+  card(msg, { id: 'produce', thinking: producerThinking(b, S().designs, S().photos) });
+  if (!b.ids.length && b.errors.length) S().updateMsg(msg, { text: `${text}\nSorry — I couldn't create that: ${b.errors[0]}` });
+}
 
 /** Adds a card to a message's pipeline, or patches the card with that id (other cards are kept). */
 function card(msg: string, step: Partial<AgentStep> & { id: string }) {
@@ -400,9 +590,11 @@ async function createAndReview(
       ? `Creating ${n} designs in ${chunks.length} batches (${chunks.join(' + ')}): max ${CHUNK} per call, later batches avoid the first batch's ideas.`
       : `Creating ${n} design${n > 1 ? 's' : ''}.`;
   S().updateMsg(msg, { text: `${lead}\n${how}` });
-  const created = await produce(msg, `Creating ${n} design${n > 1 ? 's' : ''}`, () => createDesigns(prompt, n, opts), (ids) =>
-    ids.length ? `${ids.length} built` : null,
+  const built = await produce(msg, `Creating ${n} design${n > 1 ? 's' : ''}`, () => createDesigns(prompt, n, opts, producerProgress(msg)), (b) =>
+    b.ids.length ? `${b.ids.length} built` : null,
   );
+  showBuilt(msg, built, `${lead}\n${how}`);
+  const created = built.ids;
   if (!created.length || !S().agentMode) return;
   const subjects = opts.subjects ?? [];
   // Subject per design id (recorded by runConcepts), not by position: a failed batch/concept must not shift them.
@@ -431,7 +623,20 @@ async function seeUpload(kind: PendingSee['kind'], preview: string, plan: PlanRe
   } finally {
     S().set({ busy: false });
   }
-  card(msg, { id: 'see', status: a.method === 'none' || !a.slots ? 'skipped' : 'done', detail: a.method === 'none' || !a.slots ? 'no vision' : 'Read' });
+  card(msg, {
+    id: 'see',
+    status: a.method === 'none' || !a.slots ? 'skipped' : 'done',
+    detail: a.method === 'none' || !a.slots ? 'no vision' : 'Read',
+    thinking: [
+      {
+        title: 'What I see',
+        lines:
+          a.method === 'none' || !a.slots
+            ? ['No vision model available, so the layout could not be read']
+            : [describeAnalysis(a.slots, a.texts ?? []), ...((a.texts ?? []).length ? [`Text found: ${clipWords((a.texts ?? []).join(' | '), 140)}`] : [])],
+      },
+    ],
+  });
   if (a.method === 'none' || !a.slots) {
     S().updateMsg(msg, {
       progress: null,
@@ -441,7 +646,7 @@ async function seeUpload(kind: PendingSee['kind'], preview: string, plan: PlanRe
   }
   const texts = a.texts ?? [];
   const slots = completeSlots(a.slots, texts);
-  sees.set(msg, { kind, slots, texts, plan });
+  sees.set(msg, { kind, slots, texts, plan, preview });
   S().updateMsg(msg, {
     progress: null,
     text: `${describeAnalysis(a.slots, texts)}\nIs that right? Continue — or type what's different and I'll use your correction.`,
@@ -460,15 +665,31 @@ async function runSee(id: string, correction: string | null) {
   const lead = correction ? 'Got it — using your correction.' : 'Great — building from your image.';
   const msg = say(lead);
   if (p.kind === 'recreate') {
-    S().updateMsg(msg, { text: `${lead}\nRebuilding it as an editable on-brand design.` });
+    const text = `${lead}\nRebuilding it as an editable on-brand design.`;
+    S().updateMsg(msg, { text });
     const size = p.plan.size ? { size: { ...SIZES[p.plan.size] } } : {};
-    await reviewAfter(() => runConcepts(`Recreate this uploaded ad as an editable on-brand Xero design.${found}`, 1, { reference: p.slots, brief, ...size }), {
-      brief: reviewBrief,
-    });
+    // Quiet: the Producer card carries the progress and what was built (no separate "Here's your ad" bubble).
+    const rebuild = async () => {
+      const o = await produce(
+        msg,
+        'Rebuilding your image',
+        () =>
+          runConcepts(`Recreate this uploaded ad as an editable on-brand Xero design.${found}`, 1, {
+            reference: p.slots,
+            brief,
+            ...size,
+            quiet: true,
+            onProgress: producerProgress(msg),
+          }),
+        (r) => (r.designs.length ? 'Built' : null),
+      );
+      showBuilt(msg, { ids: o.designs.map((d) => d.id), made: o.designs, fallback: o.photoFallback, errors: o.error ? [o.error] : [] }, text);
+    };
+    await reviewAfter(rebuild, { brief: reviewBrief });
     return;
   }
   const n = clampCount(p.plan.count);
-  await createAndReview(msg, lead, `Create ${n} on-brand Xero ads like this uploaded design.${found}`, n, { reference: p.slots, brief, size: p.plan.size }, reviewBrief);
+  await createAndReview(msg, lead, `Create ${n} on-brand Xero ads like this uploaded design.${found}`, n, { reference: p.slots, referenceImage: p.preview, brief, size: p.plan.size }, reviewBrief);
 }
 
 async function runSteps(plan: PlanResponse, msg: string, lead: string, message: string) {
@@ -503,7 +724,7 @@ async function runSteps(plan: PlanResponse, msg: string, lead: string, message: 
   const failed = steps.filter((s) => s.status === 'failed').length;
   S().updateMsg(msg, { text: `${lead}\n${steps.length - failed}/${steps.length} steps done${failed ? ` (${failed} failed — see above)` : ''}. Reviewing the result…` });
   const now = S().designs.find((d) => d.id === d0.id);
-  if (now && now !== d0) await reviewDesigns([d0.id], { rounds: 1, brief: message });
+  if (now && now !== d0) await reviewDesigns([d0.id], { rounds: 1, brief: message, prev: { [d0.id]: d0 } });
 }
 
 async function runStep(step: PlanStep): Promise<{ ok: boolean; detail?: string }> {
@@ -599,7 +820,7 @@ async function act(plan: PlanResponse, message: string, msg: string) {
 
 async function planAndAct(message: string, answers: Record<string, string> | null, askedAlready: boolean, questions: AgentQuestion[] = []) {
   const msg = say('');
-  card(msg, BRAND_KIT);
+  card(msg, brandKitCard());
   card(msg, {
     id: 'understand',
     label: askedAlready ? 'Planning with your answers' : 'Understanding your brief',
@@ -629,14 +850,24 @@ async function planAndAct(message: string, answers: Record<string, string> | nul
     plan = normalizePlan(raw, { message, hasDesign: !!d, askedAlready });
   } catch (e) {
     console.warn('[agent planner]', errorMessage(e));
-    card(msg, { id: 'understand', status: 'skipped', detail: 'slow → standard copilot' });
+    card(msg, {
+      id: 'understand',
+      status: 'skipped',
+      detail: 'slow → standard copilot',
+      thinking: [
+        {
+          title: 'Planner',
+          lines: [`No plan in time (${clipWords(errorMessage(e), 60)})`, 'Handed over to the standard copilot; the result is still reviewed', ...askedLines(answers, questions)],
+        },
+      ],
+    });
     S().updateMsg(msg, { progress: null, text: "The planner is slow right now, so I'm going ahead with the standard copilot and will still review the result." });
     S().set({ busy: false });
     const text = withAnswers(message, answers, questions);
     await withAgentReview(() => sendMessageClassic(text), { newRounds: 2, editRounds: 1, brief: text });
     return;
   }
-  card(msg, { id: 'understand', status: 'done', detail: planDetail(plan) });
+  card(msg, { id: 'understand', status: 'done', detail: planDetail(plan), thinking: strategistThinking(plan, { message, answers, questions }) });
   S().updateMsg(msg, { progress: null, text: `Understood: ${plan.understanding}` });
   S().set({ busy: false });
   await act(plan, message, msg);

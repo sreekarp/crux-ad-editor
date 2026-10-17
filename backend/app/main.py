@@ -17,7 +17,7 @@ from PIL import Image
 from . import agent
 from . import assets as A
 from . import images
-from .analyze import analyze as analyze_image
+from .analyze import analyze as analyze_image, upload_data_url, vision_supported
 from .config import STATIC_DIR, UPLOADS_DIR, keys_present, settings
 from .llm import BadJSON, LLMError, chat_json
 from .prompts import concepts_messages, edit_messages
@@ -32,6 +32,7 @@ app = FastAPI(title="Xero Agentic Image Editor API")
 # Total LLM time per request, kept under the browser's timeouts (frontend/src/api.ts: concepts 180 s, edit 120 s) so
 # retries/fallbacks finish -- or fail with a readable message -- while the user is still waiting for the answer.
 CONCEPTS_BUDGET = 165.0
+IMAGE_CONCEPTS_BUDGET = 60.0  # flash + reference image; the rest of CONCEPTS_BUDGET stays for the text-only pro path
 EDIT_BUDGET = 105.0
 
 _missing_keys = [k for k, ok in keys_present().items() if not ok]
@@ -466,6 +467,33 @@ def _subject_heroes(concepts: list[dict], subjects: list[str], theme: str | None
             hero.pop("photoUrl", None)
 
 
+async def _concepts_with_image(messages: list[dict], url: str, count: int, deadline: float) -> tuple[list[dict], dict]:
+    """"Like this" upload: the same prompt plus the image, on flash (pro is text-only).
+    Any failure returns ([], {}) and the caller runs the usual text-only pro path."""
+    try:
+        last = messages[-1]
+        text = (f"{last['content']}\n\nThe uploaded reference ad is attached as an image. Use it to match its layout, "
+                "mood, imagery and hero subject more closely than the reference Slots alone describe. Still return "
+                "only the JSON object.")
+        msgs = messages[:-1] + [{"role": last["role"], "content": [
+            {"type": "text", "text": text},
+            {"type": "image_url", "image_url": {"url": upload_data_url(url)}},
+        ]}]
+        data = await chat_json(msgs, tier="flash", timeout=45, max_tokens=6000, temperature=0.9, fallback=False,
+                               deadline=deadline)
+        raw = data.get("concepts")
+        if isinstance(raw, dict):
+            raw = [raw]
+        result = [normalize_slots(c) for c in raw if isinstance(c, dict) and c.get("headline")] if isinstance(raw, list) else []
+        if len(result) < count:
+            raise ValueError(f"expected {count} concepts, got {len(result)}")
+        log.info("concepts: built with the reference image (flash)")
+        return result[:count], data
+    except Exception as e:  # noqa: BLE001 — any failure falls back to the text-only path
+        log.warning("concepts with reference image failed, falling back to text-only: %s", str(e)[:200])
+        return [], {}
+
+
 @app.post("/api/design/concepts")
 async def concepts(req: ConceptsRequest) -> dict:
     t0 = time.perf_counter()
@@ -490,7 +518,10 @@ async def concepts(req: ConceptsRequest) -> dict:
                                     "least one concept when the message is about the product.")
     data: dict = {}
     result: list[dict] = []
-    for attempt in range(2):
+    if req.referenceImage and ref_slots and vision_supported("flash"):
+        result, data = await _concepts_with_image(messages, req.referenceImage, count,
+                                                  min(deadline, t0 + IMAGE_CONCEPTS_BUDGET))
+    for attempt in range(0 if result else 2):  # skipped when the image path already produced the concepts
         try:
             data = await chat_json(messages, tier="pro", timeout=50, max_tokens=6000, temperature=0.9,
                                    deadline=deadline)

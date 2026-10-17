@@ -1,7 +1,7 @@
 // Ops engine: the only way the copilot changes a design (CONTRACT "Ops semantics"). Pure; invalid ops -> errors.
 import type { AsyncOp, ButtonLayer, Design, Layer, Manifest, Op, PhotoLayer, Slots, TextLayer } from '../types';
 import { reframePhoto } from './frame';
-import { fitPhotoLayer } from './photoFit';
+import { fitPhotoLayer, keepDecorOffFaces } from './photoFit';
 import { buildDesignImpl } from './templates';
 import { measureBox, measureText } from './text';
 import { r1 } from './util';
@@ -164,7 +164,8 @@ function rebuild(d: Design, changed: Partial<Slots>, size: { width: number; heig
       newPhoto.focusY = oldPhoto.focusY;
     }
   }
-  return built;
+  // The crop is final only now: move charms / stat cards the template placed on the subject's head.
+  return keepDecorOffFaces(built);
 }
 
 function scaleDesign(d: Design, width: number, height: number): Design {
@@ -252,6 +253,12 @@ export function applyOpsImpl(
             const framed = 'focusX' in props || 'focusY' in props || 'zoom' in props;
             if (moved && !framed) Object.assign(next, reframePhoto(next, d));
           }
+          // A photo landing (new src / subject) or a computed fit (mask + crop together) moves the head: keep decor
+          // off it. Plain user drags and crop tweaks never move charms.
+          const photoLanded =
+            next.kind === 'photo' &&
+            prev.kind === 'photo' &&
+            (('src' in props && props.src !== prev.src) || 'subject' in props || 'subjectBox' in props || ('mask' in props && ('focusX' in props || 'focusY' in props || 'zoom' in props)));
           // Copy edits on slot-backed text (headline, sub, CTA...) re-run the template so everything below restacks.
           const slotKey = prev.role ? SLOT_ROLES[prev.role] : undefined;
           const textChanged =
@@ -267,6 +274,7 @@ export function applyOpsImpl(
           }
           d.layers[i] = next;
           restack(d, prev, next);
+          if (photoLanded) d = keepDecorOffFaces(d);
           break;
         }
         case 'add': {
@@ -305,6 +313,7 @@ export function applyOpsImpl(
             // mask); without one it is exactly reframePhoto.
             d.layers[d.layers.indexOf(p)] = { ...p, ...fitPhotoLayer(d, p.id).props };
           }
+          d = keepDecorOffFaces(d);
           break;
         }
         case 'delete': {
@@ -361,7 +370,7 @@ export function applyOpsImpl(
             errors.push(`resize: invalid size ${width}x${height}`);
             break;
           }
-          d = d.slots ? rebuild(d, {}, { width, height }, manifest) : scaleDesign(d, width, height);
+          d = d.slots ? rebuild(d, {}, { width, height }, manifest) : keepDecorOffFaces(scaleDesign(d, width, height));
           break;
         }
         case 'photo':

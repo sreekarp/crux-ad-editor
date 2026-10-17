@@ -404,6 +404,45 @@ export function headCoverage(layer: PhotoLayer, design: Design): number {
   return visibleField(layer, design).coverage(r);
 }
 
+/** The subject's HEAD in canvas px with the layer's CURRENT crop (cover-fit * zoom + focus, as canvas/photo.ts draws
+ *  it), clipped to the photo box; null when unknown or outside the box. With a subject box: its top ~40% (always the
+ *  face and chin), as wide as tall in source px plus a little, centred on the face and kept inside the box's columns.
+ *  With only a face point: a square of radius 9% of the photo box height around it. */
+export function headRectOnCanvas(layer: PhotoLayer): { x: number; y: number; width: number; height: number } | null {
+  if (layer.kind !== 'photo' || !(layer.width > 0) || !(layer.height > 0) || !(layer.srcW! > 0) || !(layer.srcH! > 0)) return null;
+  const sb = cleanBox(layer.subjectBox);
+  const s = layer.subject;
+  const pt = Array.isArray(s) && s.length === 2 && Number.isFinite(s[0]) && Number.isFinite(s[1]) ? [clamp01(s[0]), clamp01(s[1])] : null;
+  if (!sb && !pt) return null;
+  const fin = (v: number, d: number) => (Number.isFinite(v) ? v : d);
+  const src = { w: layer.srcW!, h: layer.srcH! };
+  const z = Math.max(1, fin(layer.zoom, 1));
+  const fx = clamp01(fin(layer.focusX, 0.5));
+  const fy = clamp01(fin(layer.focusY, 0.5));
+  let r: Rect;
+  if (sb) {
+    const bh = sb[3] - sb[1];
+    const faceX = pt ? Math.min(sb[2], Math.max(sb[0], pt[0])) : (sb[0] + sb[2]) / 2;
+    const faceY = pt ? Math.min(sb[3], Math.max(sb[1], pt[1])) : sb[1] + 0.15 * bh;
+    // Hair to chin: the top 40% of the box, and at least half the hair-to-face distance below the face (close-ups).
+    const y1 = Math.min(sb[3], Math.max(sb[1] + 0.4 * bh, faceY + 0.5 * (faceY - sb[1])));
+    const hh = y1 - sb[1];
+    const hw = ((hh * src.h) / src.w) * 1.15; // as wide as tall in source px, widened a little for hair
+    const x0 = Math.max(sb[0], Math.min(faceX - hw / 2, sb[2] - hw));
+    r = placeRect(layer.width, layer.height, src, z, fx, fy, [x0, sb[1], Math.min(sb[2], x0 + hw), y1]);
+  } else {
+    const c = placeRect(layer.width, layer.height, src, z, fx, fy, [pt![0], pt![1], pt![0], pt![1]]);
+    const rad = 0.09 * layer.height;
+    r = [c[0] - rad, c[1] - rad, c[0] + rad, c[1] + rad];
+  }
+  const x0 = Math.max(0, r[0]);
+  const y0 = Math.max(0, r[1]);
+  const x1 = Math.min(layer.width, r[2]);
+  const y1 = Math.min(layer.height, r[3]);
+  if (!(x1 - x0 > 0.5) || !(y1 - y0 > 0.5)) return null;
+  return { x: layer.x + x0, y: layer.y + y0, width: x1 - x0, height: y1 - y0 };
+}
+
 /** Fraction (0..1) of the layer's subject box that a viewer sees with its CURRENT crop (canvas, bloom mask and layers
  *  drawn above all count, as drawn by canvas/photo.ts). 1 when the layer has no subject box or source size. */
 export function subjectCoverage(layer: PhotoLayer, design: Design): number {

@@ -4,6 +4,7 @@ import type { AsyncOp, Design, Issue, Layer, Manifest, Op, Slots } from '../type
 import { buildDesignImpl } from './templates';
 import { brandScoreImpl, checkDesignImpl } from './checker';
 import { applyOpsImpl } from './ops';
+import { keepDecorOffFaces } from './photoFit';
 
 export type { Size } from './templates';
 export { setTextMeasurer, measureText } from './text';
@@ -35,7 +36,8 @@ export function buildDesign(
   manifest: Manifest | null,
   opts: { id?: string; name?: string } = {},
 ): Design {
-  return buildDesignImpl(slots, size, manifest, opts);
+  // Charms/stat cards off photo subjects' heads (a no-op until a photo knows its subject; lib/photoFocus re-runs it).
+  return keepDecorOffFaces(buildDesignImpl(slots, size, manifest, opts));
 }
 
 /** Brand rules -> issues. Pure. */

@@ -113,10 +113,11 @@ describe('review outcome (✓ vs ⚠, edits vs fixed)', () => {
     expect(resolvedIssues([], last)).toEqual([]);
   });
 
-  it('shortens issues for the summary line', () => {
-    expect(shortIssue('Headline is clipped.')).toBe('headline is clipped');
+  it('shortens issues for the summary bullets (sentence case, word boundary, no "…")', () => {
+    expect(shortIssue('headline is clipped.')).toBe('Headline is clipped');
     expect(shortIssue('XERO logo too small')).toBe('XERO logo too small');
-    expect(shortIssue('x'.repeat(80))).toHaveLength(60);
+    expect(shortIssue('x'.repeat(80))).toHaveLength(70); // one giant token is the only hard cut
+    expect(shortIssue('x'.repeat(80))).not.toContain('…');
   });
 
   it('builds a design-tagged "Fix remaining issues" chip asking for exactly the open issues', () => {

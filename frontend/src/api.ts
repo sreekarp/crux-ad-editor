@@ -61,6 +61,8 @@ export interface ConceptsRequest {
   subjects?: string[];
   /** Agent Mode: campaign theme carried by every concept's copy and photo scene (e.g. "Christmas"). */
   theme?: string;
+  /** Uploaded ad (/static/uploads/...): sent to the vision tier with the prompt; backend falls back to text-only. */
+  referenceImage?: string;
 }
 
 export interface EditRequest {

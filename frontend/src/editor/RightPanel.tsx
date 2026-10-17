@@ -15,21 +15,40 @@ const STICK_PX = 80;
 
 /** Lets a message tell the list "the user is reading here": stop following new content until they scroll down. */
 const UnpinCtx = createContext<() => void>(() => {});
+/** Lets content inside a message ask its Clamp to show everything (e.g. a step card opening its thinking panel). */
+const RevealCtx = createContext<() => void>(() => {});
 
 const timeOf = (at?: number) => (at ? new Date(at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : undefined);
 
 const NUM_RE = /^\s*(\d+)[.)]\s+(.*)$/;
 const BULLET_RE = /^\s*[•\-–·*]\s+(.*)$/;
+/** "## Fixed" -> a small section label (agent messages only; classic replies never start a line with "## "). */
+const SECTION_RE = /^##\s+(.+)$/;
 
 /**
- * Plain text with light structure: numbered / bulleted lines get a hanging indent, the one line directly under a
- * list item (e.g. a variation's quoted headline) stays indented with it, blank lines become gaps.
+ * Plain text with light structure: "## " lines are section labels, numbered / bulleted lines get a hanging indent,
+ * the one line directly under a list item (e.g. a variation's quoted headline) stays indented with it, blank lines
+ * become gaps.
  */
 function RichText({ text }: { text: string }) {
   let afterItem = false;
   return (
     <>
       {text.split('\n').map((line, i) => {
+        const section = SECTION_RE.exec(line);
+        if (section) {
+          afterItem = false;
+          return (
+            <div
+              key={i}
+              role="heading"
+              aria-level={4}
+              className={`${i ? 'mt-2' : ''} pb-px text-[10.5px] font-bold uppercase leading-5 tracking-wider text-slate-500`}
+            >
+              {section[1]}
+            </div>
+          );
+        }
         const num = NUM_RE.exec(line);
         const bullet = BULLET_RE.exec(line);
         if (num || bullet) {
@@ -79,10 +98,15 @@ function Clamp({ live, tone = 'light', children }: { live: boolean; tone?: 'ligh
   }, [open]);
   const folded = tall && !open && !live;
   const fade = tone === 'navy' ? 'from-navy' : tone === 'rose' ? 'from-rose-50' : 'from-white';
+  // Something inside wants to be read in full: unfold (so it can't land behind "Show more") and hold the scroll still.
+  const reveal = () => {
+    unpin();
+    setOpen(true);
+  };
   return (
     <div ref={wrapRef}>
       <div ref={ref} className="relative overflow-hidden" style={folded ? { maxHeight: CLAMP_PX } : undefined}>
-        {children}
+        <RevealCtx.Provider value={reveal}>{children}</RevealCtx.Provider>
         {folded ? <div className={`pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t ${fade} to-transparent`} /> : null}
       </div>
       {tall && !live ? (
@@ -102,6 +126,13 @@ function Clamp({ live, tone = 'light', children }: { live: boolean; tone?: 'ligh
       ) : null}
     </div>
   );
+}
+
+/** Step cards inside a Clamp: opening a card's thinking unfolds the message; closing it just keeps the scroll still. */
+function MessageSteps({ steps }: { steps: NonNullable<ChatMsg['steps']> }) {
+  const reveal = useContext(RevealCtx);
+  const unpin = useContext(UnpinCtx);
+  return <StepList steps={steps} onToggle={(open) => (open ? reveal() : unpin())} />;
 }
 
 function Message({ m, onAction }: { m: ChatMsg; onAction: (a: ChatAction) => void }) {
@@ -137,7 +168,7 @@ function Message({ m, onAction }: { m: ChatMsg; onAction: (a: ChatAction) => voi
                   <RichText text={m.text} />
                 </div>
               ) : null}
-              {m.steps?.length ? <StepList steps={m.steps} /> : null}
+              {m.steps?.length ? <MessageSteps steps={m.steps} /> : null}
             </Clamp>
           </div>
         ) : null}

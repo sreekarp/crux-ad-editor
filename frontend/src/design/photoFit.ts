@@ -5,11 +5,11 @@
 //   chunky photo mask that fits the same box (maskFits) and switch to the best, (c) the head itself still cut ->
 //   needsRegenerate (regenerate at photoTargetAspect / photoVisibleRect).
 // Layers without a subjectBox behave exactly as before (plain reframe, coverage 1).
-import { PHOTO_MASKS } from '../brand';
+import { PHOTO_MASKS, SAFE } from '../brand';
 import type { BloomShape, Design, Layer, PhotoLayer } from '../types';
-import { headCoverage, reframePhoto, subjectCoverage, visibleRect } from './frame';
+import { headCoverage, headRectOnCanvas, reframePhoto, subjectCoverage, visibleRect } from './frame';
 import { BLOOM_ASPECT, BLOOM_CORE } from './shapes';
-import { overlaps, samplePoints, surfaceAt } from './util';
+import { bounds, overlaps, r1, samplePoints, surfaceAt } from './util';
 
 /** Copy, logo, buttons and stats: a swapped mask must not newly cover them. */
 const CONTENT = new Set<Layer['kind']>(['text', 'button', 'logo', 'tags', 'stat']);
@@ -83,4 +83,121 @@ export function fitPhotoLayer(design: Design, layerId: string): PhotoFit {
   }
   const head = coverage < MIN_COVERAGE ? headCoverage({ ...layer, ...props }, design) : 1;
   return { props, coverage, needsRegenerate: coverage < MIN_COVERAGE && head < MIN_COVERAGE };
+}
+
+// ---------------------------------------------------------------------------------------------
+// Decor off faces. Charms are kept off copy at build time, but the photo's crop is only known after framing, so a charm
+// (or stat card) can land on the subject's head. Layout paths (rebuild, resize, reframe, photo swap, build + focus)
+// run keepDecorOffFaces after framing; a plain user drag/update never does, so hand-placed decor stays put.
+
+type Ext = { x0: number; y0: number; x1: number; y1: number };
+
+/** A charm / stat card may cover at most this share of its own area with a head before it is moved. */
+export const HEAD_OVERLAP_MAX = 0.08;
+/** What moved decor must not land on: the message, plus other charms and stat cards (no piling up). */
+const DECOR_BLOCKERS = new Set<Layer['kind']>(['text', 'logo', 'button', 'tags', 'stat', 'charm']);
+
+const isDecorMover = (l: Layer) => !l.hidden && ((l.kind === 'charm' && l.role !== 'decor') || l.kind === 'stat');
+const hitsExt = (a: Ext, b: Ext) => a.x0 < b.x1 && b.x0 < a.x1 && a.y0 < b.y1 && b.y0 < a.y1;
+const interArea = (a: Ext, b: Ext) =>
+  Math.max(0, Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0)) * Math.max(0, Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0));
+const insetExt = (r: Ext, f: number): Ext => {
+  const dx = (r.x1 - r.x0) * f;
+  const dy = (r.y1 - r.y0) * f;
+  return { x0: r.x0 + dx, y0: r.y0 + dy, x1: r.x1 - dx, y1: r.y1 - dy };
+};
+
+/** Head boxes (canvas px, clipped to the canvas) of the visible photos whose subject is known. */
+function headExts(design: Design): { r: Ext; photo: PhotoLayer }[] {
+  const out: { r: Ext; photo: PhotoLayer }[] = [];
+  for (const l of design.layers) {
+    if (l.kind !== 'photo' || l.hidden) continue;
+    const h = headRectOnCanvas(l);
+    if (!h) continue;
+    const r = { x0: Math.max(0, h.x), y0: Math.max(0, h.y), x1: Math.min(design.width, h.x + h.width), y1: Math.min(design.height, h.y + h.height) };
+    if (r.x1 - r.x0 > 0.5 && r.y1 - r.y0 > 0.5) out.push({ r, photo: l });
+  }
+  return out;
+}
+
+/** One pass: every charm / stat card covering a head by > HEAD_OVERLAP_MAX of its area moves (same size and rotation)
+ *  to the cheapest free spot on a coarse grid: inside the safe margin, clear of every head, copy, logo, button, tags and
+ *  other decor; cost = distance, plus a penalty when the spot leaves the photo / bloom edge (decor straddles the photo's
+ *  silhouette in the refs). Left where it is when nothing fits. null when nothing moved. */
+function decorPass(design: Design, heads: { r: Ext; photo: PhotoLayer }[]): Design | null {
+  const W = design.width;
+  const H = design.height;
+  const m = W * SAFE.margin;
+  const margin: Ext = { x0: m, y0: m, x1: W - m, y1: H - m };
+  // 9:16: a stat card is content, so it stays in the story safe zone (charms only keep the margin).
+  const story: Ext = { x0: W * SAFE.story.side, y0: H * SAFE.story.top, x1: W * (1 - SAFE.story.side), y1: H * (1 - SAFE.story.bottom) };
+  const step = Math.max(2, Math.min(W, H) * 0.02);
+  const edgePenalty = Math.min(W, H) * 0.25;
+  let layers: Layer[] | null = null;
+  const cur = () => layers ?? design.layers;
+  for (let i = 0; i < design.layers.length; i++) {
+    const l = cur()[i];
+    if (!isDecorMover(l)) continue;
+    const b = bounds(l);
+    const area = (b.x1 - b.x0) * (b.y1 - b.y0);
+    if (!(area > 0)) continue;
+    const hit = heads.find((h) => interArea(b, h.r) > HEAD_OVERLAP_MAX * area);
+    if (!hit) continue;
+    const pad = l.kind === 'charm' ? 0.1 : 0; // charm art has transparent padding; a stat card is solid to its edge
+    const blockers = cur()
+      .filter((o, j) => j !== i && !o.hidden && DECOR_BLOCKERS.has(o.kind))
+      .map((o) => bounds(o));
+    // The silhouette edges the decor should stay on: the photo whose head it covered, and blooms around that photo.
+    const pb = bounds(hit.photo);
+    const anchors: Layer[] = [hit.photo, ...cur().filter((o) => o.kind === 'bloom' && !o.hidden && hitsExt(bounds(o), pb))];
+    // On the edge = straddling the visible silhouette (photo + those blooms): part on it, part off it.
+    const onEdge = (e: Ext) => {
+      const pts = samplePoints({ x: e.x0, y: e.y0, width: e.x1 - e.x0, height: e.y1 - e.y0 }, 4, 4, 0.15);
+      const n = pts.filter(([x, y]) => anchors.some((a) => !!surfaceAt(a, x, y))).length;
+      return n > 0 && n < pts.length;
+    };
+    const f = l.kind === 'stat' && H / W > 1.6 ? story : margin;
+    let best: { x: number; y: number; cost: number } | null = null;
+    const i0 = Math.ceil((f.x0 - b.x0) / step);
+    const i1 = Math.floor((f.x1 - b.x1) / step);
+    const j0 = Math.ceil((f.y0 - b.y0) / step);
+    const j1 = Math.floor((f.y1 - b.y1) / step);
+    for (let jj = j0; jj <= j1; jj++) {
+      for (let ii = i0; ii <= i1; ii++) {
+        const nx = r1(l.x + ii * step);
+        const ny = r1(l.y + jj * step);
+        const dx = nx - l.x;
+        const dy = ny - l.y;
+        const dist = Math.hypot(dx, dy);
+        if (best && dist >= best.cost) continue; // can't beat the best (cost >= distance)
+        const e = { x0: b.x0 + dx, y0: b.y0 + dy, x1: b.x1 + dx, y1: b.y1 + dy };
+        if (e.x0 < f.x0 - 0.5 || e.y0 < f.y0 - 0.5 || e.x1 > f.x1 + 0.5 || e.y1 > f.y1 + 0.5) continue;
+        if (heads.some((h) => hitsExt(e, h.r))) continue;
+        const core = insetExt(e, pad);
+        if (blockers.some((o) => hitsExt(core, o))) continue;
+        const cost = dist + (onEdge(e) ? 0 : edgePenalty);
+        if (!best || cost < best.cost) best = { x: nx, y: ny, cost };
+      }
+    }
+    if (!best) continue;
+    layers ??= design.layers.slice();
+    layers[i] = { ...l, x: best.x, y: best.y } as Layer;
+  }
+  return layers ? { ...design, layers } : null;
+}
+
+/** Keep charms and stat cards off the heads of photo subjects (headRectOnCanvas, with each photo's current crop): see
+ *  decorPass. Pure, deterministic and idempotent (passes repeat until nothing moves, so running it again changes
+ *  nothing); returns the same object when nothing moves. Call it from layout paths only (build/rebuild/resize/fit),
+ *  never on a plain user drag or update. */
+export function keepDecorOffFaces(design: Design): Design {
+  const heads = headExts(design);
+  if (!heads.length || !design.layers.some(isDecorMover)) return design;
+  let d = design;
+  for (let pass = 0; pass < 3; pass++) {
+    const next = decorPass(d, heads);
+    if (!next) break;
+    d = next;
+  }
+  return d;
 }

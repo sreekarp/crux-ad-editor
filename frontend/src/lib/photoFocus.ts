@@ -2,7 +2,7 @@
 // The layer also remembers the subject + source size, so the design engine can re-frame it after any layout change
 // (see design/frame.ts).
 import { frameSubject } from '../design/frame';
-import { fitPhotoLayer, photoVisibleRect } from '../design/photoFit';
+import { fitPhotoLayer, keepDecorOffFaces, photoVisibleRect } from '../design/photoFit';
 import type { Design, Layer, Op, PhotoBankItem, PhotoLayer } from '../types';
 
 type FocusProps = Partial<Pick<PhotoLayer, 'focusX' | 'focusY' | 'zoom' | 'subject' | 'subjectBox' | 'srcW' | 'srcH'>>;
@@ -111,7 +111,8 @@ export function focusPropsFromResult(
   return layer.subject ? { focusX: 0.5, focusY: 0.5, zoom: 1, subject: null, ...staleBox(layer) } : staleBox(layer);
 }
 
-/** Frames every photo layer whose src is a bank photo with a known subject position. */
+/** Frames every photo layer whose src is a bank photo with a known subject position, then keeps charms / stat cards
+ *  off the framed subjects' heads (the build path's layout guard: buildDesign alone doesn't know the subject yet). */
 export function withPhotoFocus(design: Design, photos: PhotoBankItem[]): Design {
   let changed = false;
   const layers = design.layers.map((l): Layer => {
@@ -121,5 +122,5 @@ export function withPhotoFocus(design: Design, photos: PhotoBankItem[]): Design 
     changed = true;
     return { ...l, ...props };
   });
-  return changed ? { ...design, layers } : design;
+  return changed ? keepDecorOffFaces({ ...design, layers }) : design;
 }
