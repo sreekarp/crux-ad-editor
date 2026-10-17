@@ -170,7 +170,7 @@ def _norm_xy(vals: list, tw: int, th: int) -> list[float]:
 
 
 async def locate_subject(url: str, timeout: float = 8.0) -> dict:
-    """Main subject of a /static photo via ONE Flash vision call -> {focus: [x, y], box: [x0, y0, x1, y1]} (0-1
+    """Main subject of a /static photo via one Flash vision call (retried once) -> {focus: [x, y], box: [x0, y0, x1, y1]} (0-1
     fractions; keys present only when valid); {} on failure. box = what must stay visible for a crop to look good."""
     try:
         from .config import flash_client  # local import: keeps images importable without the chat client
@@ -180,12 +180,21 @@ async def locate_subject(url: str, timeout: float = 8.0) -> dict:
         buf = io.BytesIO()
         im.save(buf, "JPEG", quality=85)
         data = "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode()
-        resp = await asyncio.wait_for(flash_client.chat.completions.create(
-            model=settings.flash_model, timeout=timeout, max_tokens=200, temperature=0,
-            response_format={"type": "json_object"},
-            messages=[{"role": "user", "content": [{"type": "text", "text": SUBJECT_PROMPT},
-                                                   {"type": "image_url", "image_url": {"url": data}}]}]),
-            timeout=timeout)
+        # The Flash tier times out now and then; without a box the editor can't keep the head inside the shape, so a
+        # failed call (timeout / API error) is retried once.
+        for attempt in (1, 2):
+            try:
+                resp = await asyncio.wait_for(flash_client.chat.completions.create(
+                    model=settings.flash_model, timeout=timeout, max_tokens=200, temperature=0,
+                    response_format={"type": "json_object"},
+                    messages=[{"role": "user", "content": [{"type": "text", "text": SUBJECT_PROMPT},
+                                                           {"type": "image_url", "image_url": {"url": data}}]}]),
+                    timeout=timeout)
+                break
+            except Exception as e:  # noqa: BLE001
+                if attempt == 2:
+                    raise
+                log.info("subject locate attempt 1 failed for %s (%s): retrying once", url, type(e).__name__)
         text = resp.choices[0].message.content or ""
         m = re.search(r"\{.*\}", text, re.S)
         d = json.loads(m.group(0)) if m else {}
@@ -203,7 +212,7 @@ async def locate_subject(url: str, timeout: float = 8.0) -> dict:
             out["focus"] = [round((b[0] + b[2]) / 2, 3), round(b[1] + (b[3] - b[1]) * 0.25, 3)]
         return out
     except Exception as e:  # noqa: BLE001
-        log.info("subject locate failed for %s: %s", url, str(e)[:160])
+        log.info("subject locate failed for %s: %s %s", url, type(e).__name__, str(e)[:160])
         return {}
 
 

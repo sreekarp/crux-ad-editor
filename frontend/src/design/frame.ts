@@ -163,7 +163,18 @@ export function frameSubject(
   const vy1 = Math.min(bh, canvas.height - box.y);
   if (!src.w || !src.h || vx1 <= vx0 || vy1 <= vy0) return { focusX: sx, focusY: sy, zoom: base };
   const sb = cleanBox(subjectBox);
-  if (sb) return frameBox(box, canvas, subject, src, sb);
+  if (sb) {
+    const fb = frameBox(box, canvas, subject, src, sb);
+    if (fb.full) return fb.framing;
+    // No crop shows the whole box (tall bank boxes, low blooms): face first. The point framing wins when it shows
+    // clearly more of the head and face; otherwise the box framing (more of the essential region) stays.
+    const fp = frameSubject(box, canvas, subject, src);
+    const { coverage } = visibleField(box, canvas);
+    const [head, face] = headRects(sb, subject, src);
+    const seen = (f: Framing) =>
+      coverage(placeRect(bw, bh, src, f.zoom, f.focusX, f.focusY, head)) + coverage(placeRect(bw, bh, src, f.zoom, f.focusX, f.focusY, face));
+    return seen(fp) > seen(fb.framing) + 0.02 ? fp : fb.framing;
+  }
   const vt = visibleTarget(box, canvas);
   const tx = vt ? vt.tx : (vx0 + vx1) / 2;
   const spanX = vt ? vt.spanX : vx1 - vx0;
@@ -293,7 +304,7 @@ const FULL = 0.995;
  *  not the edge at the region's centre). Zoom only slides the photo further; it never blows a close-up box up to fill
  *  the shape. When no crop shows the whole box: the crop showing the largest fraction, keeping the head over the lower
  *  body (the renderer can't zoom out below cover-fit; fitPhotoLayer then tries another mask or asks for a regenerate). */
-function frameBox(box: Box, canvas: Canvas, subject: [number, number], src: { w: number; h: number }, sb: Rect): Framing {
+function frameBox(box: Box, canvas: Canvas, subject: [number, number], src: { w: number; h: number }, sb: Rect): { framing: Framing; full: boolean } {
   const bw = box.width;
   const bh = box.height;
   const n = FINE;
@@ -361,10 +372,36 @@ function frameBox(box: Box, canvas: Canvas, subject: [number, number], src: { w:
       }
     }
     // Least zoom at which the whole box fits; within it, the best margins and placement.
-    if (zFull.score > -Infinity) return { focusX: zFull.fx, focusY: zFull.fy, zoom: Math.round(z * 100) / 100 };
+    if (zFull.score > -Infinity) return { framing: { focusX: zFull.fx, focusY: zFull.fy, zoom: Math.round(z * 100) / 100 }, full: true };
     if (zBest.score > best.score) best = { fx: zBest.fx, fy: zBest.fy, z: Math.round(z * 100) / 100, score: zBest.score };
   }
-  return { focusX: best.fx, focusY: best.fy, zoom: best.z };
+  return { framing: { focusX: best.fx, focusY: best.fy, zoom: best.z }, full: false };
+}
+
+/** Head (source fractions: box top = hair, down to as far below the face as the hair is above it, as wide as tall in
+ *  source px, centred on the face) and the face patch inside it: what a forced cut must keep first. */
+function headRects(sb: Rect, subject: [number, number], src: { w: number; h: number }): [Rect, Rect] {
+  const faceY = Math.min(sb[3], Math.max(sb[1], clamp01(subject[1])));
+  const faceX = Math.min(sb[2], Math.max(sb[0], clamp01(subject[0])));
+  const y1 = Math.min(sb[3], Math.max(faceY + (faceY - sb[1]), sb[1] + 0.2 * (sb[3] - sb[1])));
+  const hh = y1 - sb[1];
+  const hw = (hh * src.h) / src.w; // same px size across
+  const head: Rect = [Math.max(sb[0], faceX - hw / 2), sb[1], Math.min(sb[2], faceX + hw / 2), y1];
+  const face: Rect = [faceX - hw / 4, Math.max(sb[1], faceY - hh / 4), faceX + hw / 4, Math.min(y1, faceY + hh / 4)];
+  return [head, face];
+}
+
+/** Fraction (0..1) of the layer's head (headRects: hair to chin, as wide as tall) visible with its CURRENT crop; 1
+ *  without a subject box or source size. A forced cut that keeps this keeps what matters most. */
+export function headCoverage(layer: PhotoLayer, design: Design): number {
+  const sb = cleanBox(layer.subjectBox);
+  if (!sb || !layer.srcW || !layer.srcH || !(layer.width > 0) || !(layer.height > 0)) return 1;
+  const fin = (v: number, d: number) => (Number.isFinite(v) ? v : d);
+  const src = { w: layer.srcW, h: layer.srcH };
+  const subject: [number, number] = layer.subject ?? [(sb[0] + sb[2]) / 2, sb[1] + 0.15 * (sb[3] - sb[1])];
+  const z = Math.max(1, fin(layer.zoom, 1));
+  const r = placeRect(layer.width, layer.height, src, z, clamp01(fin(layer.focusX, 0.5)), clamp01(fin(layer.focusY, 0.5)), headRects(sb, subject, src)[0]);
+  return visibleField(layer, design).coverage(r);
 }
 
 /** Fraction (0..1) of the layer's subject box that a viewer sees with its CURRENT crop (canvas, bloom mask and layers

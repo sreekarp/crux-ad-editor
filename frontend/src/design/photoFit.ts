@@ -2,13 +2,31 @@
 // for the crop to look good, always the whole head and hair) inside the visible part of its shape: bloom mask, rounded
 // frame, card photo area or full-bleed under overlays. The ladder:
 //   (a) box-aware reframe (design/frame.ts), (b) for a bloom-masked photo whose mask shows < MIN_COVERAGE, score every
-//   chunky photo mask in the same box and switch to the best, (c) still under MIN_COVERAGE -> needsRegenerate
-//   (regenerate at photoTargetAspect / photoVisibleRect).
+//   chunky photo mask that fits the same box (maskFits) and switch to the best, (c) the head itself still cut ->
+//   needsRegenerate (regenerate at photoTargetAspect / photoVisibleRect).
 // Layers without a subjectBox behave exactly as before (plain reframe, coverage 1).
 import { PHOTO_MASKS } from '../brand';
-import type { Design, PhotoLayer } from '../types';
-import { reframePhoto, subjectCoverage, visibleRect } from './frame';
-import { BLOOM_CORE } from './shapes';
+import type { BloomShape, Design, Layer, PhotoLayer } from '../types';
+import { headCoverage, reframePhoto, subjectCoverage, visibleRect } from './frame';
+import { BLOOM_ASPECT, BLOOM_CORE } from './shapes';
+import { overlaps, samplePoints, surfaceAt } from './util';
+
+/** Copy, logo, buttons and stats: a swapped mask must not newly cover them. */
+const CONTENT = new Set<Layer['kind']>(['text', 'button', 'logo', 'tags', 'stat']);
+
+/** May the photo switch to `mask` in its CURRENT box? The box was sized and placed for the template's mask, so only
+ *  when the bloom keeps its natural aspect (within 5%: blooms are never squashed), covers no copy/logo/button/stat the
+ *  current mask leaves clear, and does not repeat a bloom drawn behind the photo (depth bloom). */
+function maskFits(design: Design, layer: PhotoLayer, mask: BloomShape): boolean {
+  const a = BLOOM_ASPECT[mask];
+  if (!a || !(layer.width > 0) || !(layer.height > 0) || Math.abs(layer.width / layer.height / a - 1) > 0.05) return false;
+  const idx = design.layers.findIndex((l) => l.id === layer.id);
+  if (design.layers.slice(0, Math.max(0, idx)).some((l) => l.kind === 'bloom' && !l.hidden && l.shape === mask && overlaps(l, layer))) return false;
+  const cand: PhotoLayer = { ...layer, mask };
+  return !design.layers.some(
+    (l) => CONTENT.has(l.kind) && !l.hidden && samplePoints(l, 5, 3, 0).some(([x, y]) => !!surfaceAt(cand, x, y) && !surfaceAt(layer, x, y)),
+  );
+}
 
 /** Share of the subject box that must be visible for a placement to pass. */
 export const MIN_COVERAGE = 0.95;
@@ -37,13 +55,15 @@ export interface PhotoFit {
   props: Partial<PhotoLayer>;
   /** Fraction (0..1) of the subject box visible with `props` applied (= subjectCoverage). */
   coverage: number;
-  /** No crop or mask in this box shows enough of the subject: the image itself must change. */
+  /** No crop or mask in this box shows enough of the subject, and the head itself is cut: the image must change. */
   needsRegenerate: boolean;
 }
 
-/** Shape-aware placement for one photo layer: (a) box-aware reframe; (b) if the current mask shows < MIN_COVERAGE of
- *  the subject box, every chunky photo mask (same box) is scored and the best one wins; (c) needsRegenerate when even
- *  the best stays < MIN_COVERAGE. `coverage` always equals subjectCoverage of the layer with `props` applied. */
+/** Shape-aware placement for one photo layer: (a) box-aware reframe (face first when no crop shows the whole box);
+ *  (b) if the current mask shows < MIN_COVERAGE of the subject box, every chunky photo mask that fits the same box
+ *  (maskFits) is scored and the best one wins; (c) needsRegenerate when even the best stays < MIN_COVERAGE AND the head
+ *  (headCoverage) is cut too: a tall box whose body runs out of the shape but whose head is in view needs no new
+ *  image. `coverage` always equals subjectCoverage of the layer with `props` applied. */
 export function fitPhotoLayer(design: Design, layerId: string): PhotoFit {
   const layer = design.layers.find((l): l is PhotoLayer => l.id === layerId && l.kind === 'photo');
   if (!layer) return { props: {}, coverage: 1, needsRegenerate: false };
@@ -51,7 +71,7 @@ export function fitPhotoLayer(design: Design, layerId: string): PhotoFit {
   let coverage = subjectCoverage({ ...layer, ...props }, design);
   if (coverage < MIN_COVERAGE && layer.mask && layer.subjectBox) {
     for (const mask of PHOTO_MASKS) {
-      if (mask === layer.mask) continue;
+      if (mask === layer.mask || !maskFits(design, layer, mask)) continue;
       const cand: PhotoLayer = { ...layer, mask };
       const f = reframePhoto(cand, design);
       const cov = subjectCoverage({ ...cand, ...f }, design);
@@ -61,5 +81,6 @@ export function fitPhotoLayer(design: Design, layerId: string): PhotoFit {
       }
     }
   }
-  return { props, coverage, needsRegenerate: coverage < MIN_COVERAGE };
+  const head = coverage < MIN_COVERAGE ? headCoverage({ ...layer, ...props }, design) : 1;
+  return { props, coverage, needsRegenerate: coverage < MIN_COVERAGE && head < MIN_COVERAGE };
 }
