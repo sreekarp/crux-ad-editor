@@ -1,7 +1,7 @@
 # Contract — Xero Agentic Image Editor
 
 Shared interfaces between the 4 workstreams. Types live in `frontend/src/types.ts` (source of truth).
-Brand constants live in `frontend/src/brand.ts`. Product plan: `PLAN.md`.
+Brand constants live in `frontend/src/brand.ts`. Product plan: [`PLAN.md`](PLAN.md).
 
 ## Architecture
 
@@ -26,7 +26,7 @@ Key rule: the LLM only fills **Slots** (copy, template, colourway, hero, charms)
 | C. Editor | `frontend/**` EXCEPT `frontend/src/design/**`, `frontend/src/types.ts`, `frontend/src/brand.ts` |
 | D. Design engine | `frontend/src/design/**` (+ its tests) |
 | E. Import (PSD/SVG/raster) | `frontend/src/import/**` (+ tests/fixtures); may add the `ag-psd` npm dependency |
-| Controller | `frontend/src/types.ts`, `frontend/src/brand.ts`, `backend/data/references.json`, `docs/`, `PLAN.md`, `.env` |
+| Controller | `frontend/src/types.ts`, `frontend/src/brand.ts`, `backend/data/references.json`, `docs/` (incl. `docs/PLAN.md`), `.env` |
 
 Never read or print `.env` values. Backend loads it with python-dotenv from the project root (`../.env` relative to `backend/`).
 
