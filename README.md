@@ -1,137 +1,220 @@
-# Xero Copilot — an agentic, on-brand image editor
+# Xero Copilot — an agentic, on-brand ad editor
 
-An AI copilot that lives inside an image editor. Designers can start from a blank canvas, edit an existing design,
-or drop in a reference and ask for **"4 different images like this"**. Every result is a layered, editable design
-that follows the Xero brand kit, not a flat picture.
+[![CI](https://github.com/sreekarp/crux-ad-editor/actions/workflows/ci.yml/badge.svg)](https://github.com/sreekarp/crux-ad-editor/actions/workflows/ci.yml)
+![TypeScript](https://img.shields.io/badge/TypeScript-React_19-3178C6?logo=typescript&logoColor=white)
+![Python](https://img.shields.io/badge/Python-FastAPI-009688?logo=fastapi&logoColor=white)
+![Tests](https://img.shields.io/badge/tests-168_passing-2ea44f)
+
+An AI copilot that lives inside an image editor. You describe an ad, point at a reference and ask for
+**"4 different images like this"**, or drop in a Photoshop file, and the copilot produces **layered, editable designs
+that follow the Xero brand kit** — not flat AI pictures.
+
+Built solo in one day at the **GetCrux AI hackathon** (17 October 2026), against a brief to build an agentic image
+editor for a real brand.
+
+![The editor: reference ads on the left, an editable recreation on the canvas, layer properties and the copilot chat on the right](docs/screenshots/editor.jpg)
+
+## Highlights
+
+- **The LLM never places pixels.** Models choose *what to say* (copy, template, colourway, photo, charms); deterministic
+  TypeScript lays the design out. That one decision is why every output is on-brand, editable and testable.
+- **A brand guard, written as code.** 18 rules from the brand guidelines (palette, logo colour per background, the logo
+  pill over photos, one CTA, safe margins, Meta's 9:16 safe zone, disclaimers…) are checked live, scored 0–100 and
+  fixed in one click.
+- **An agent that checks its own work.** In Agent mode the copilot asks clarifying questions only when the answer would
+  change the output, then renders each design, scores it (brand checker + vision critique), applies a fix, re-scores,
+  and keeps whichever version scored higher.
+- **Real file import.** PSD type layers and SVG text come in as editable text; pixel layers become movable layers.
+- **Built to survive a live demo.** Every model call has a timeout and a fallback, a pre-generated photo bank keeps
+  generation fast, and **Recreate** works with no AI at all.
+- **168 unit tests** cover the design engine, brand rules, importers and agent logic.
 
 ## What it does
 
-| Mode | How |
+| Mode | How it works |
 |---|---|
-| Blank → design | Describe the ad in chat ("4 concepts for florists about cash flow"). The copilot writes the copy, picks layouts, photos, charms and colourways. |
-| Reference → variations | Pick one of the 20 reference ads (or upload one). **Recreate** rebuilds it as editable layers instantly. "Create 4 different images like this" (any number from 1 to 6; plural requests with no number give 3) keeps its structure and varies the angle, photo and colourway. |
-| Edit existing designs | Chat ("make it dark", "shorter headline", "use a photo of a baker", "make it 9:16") or edit directly: drag, resize, double-click text, layers, undo/redo. |
-| Import PSD / SVG / PNG | Photoshop type layers and SVG text become **editable text**. Pixel layers and images become movable layers. PNG/JPG come in as a locked image that can be pixel-edited or recreated. |
-| Brand guard | 18 brand rules checked live (palette, logo colour per background, logo pill on photos, one CTA, headline length, safe margins, Meta 9:16 safe zone, disclaimers…). The score badge shows any issues, with one-click **Fix all**. |
-| Export | Pixel-exact PNG (1080×1350 / 1080×1080 / 1080×1920), high-res 2× PNG, JPG, all variations at once, or the editable design file (.json). Dropping the .json back on the canvas reopens it. |
+| Blank → design | Describe the ad in chat ("4 concepts for florists about cash flow"). The copilot writes the copy and picks layouts, photos, charms and colourways. |
+| Reference → variations | Pick one of the 20 reference ads, or upload your own. **Recreate** rebuilds it as editable layers instantly. "Create 4 different images like this" keeps its structure and varies the angle, photo and colourway. |
+| Edit with chat or by hand | "Make it dark", "shorter headline", "use a photo of a baker", "make it 9:16" — or drag, resize, double-click to type, reorder layers, undo/redo. |
+| Import PSD / SVG / PNG | Photoshop type layers and SVG text become **editable text**. PNG/JPG come in as a locked image that can be pixel-edited or recreated as layers. |
+| Brand guard | Live score badge with every issue listed, a per-issue **Fix** and **Fix all**. Off-brand requests ("make the logo red") are declined with an on-brand alternative. |
+| Export | Pixel-exact PNG (1080×1350, 1080×1080, 1080×1920), 2× PNG, JPG, every variation at once, or the editable design file (`.json`), which reopens when dropped back on the canvas. |
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/brand-guard.jpg" alt="Brand check panel listing three issues: an off-brand headline colour, a non-navy text colour, and a CTA running off the canvas, each with a Fix button"></td>
+    <td width="50%"><img src="docs/screenshots/reflow-9x16.jpg" alt="The same design reflowed to a 1080x1920 Story format with a brand score of 100"></td>
+  </tr>
+  <tr>
+    <td><b>Brand guard.</b> A broken design scores 55/100; every issue is explained and auto-fixable.</td>
+    <td><b>Reflow, not stretch.</b> The same design rebuilt for 9:16 inside Meta's safe zones.</td>
+  </tr>
+</table>
 
 ## How it works
 
+```mermaid
+flowchart LR
+  subgraph Browser["Browser — React 19 + Konva"]
+    Chat["Copilot chat<br/>(classic or Agent mode)"]
+    Engine["Design engine (pure TS)<br/>buildDesign · applyOps<br/>checkDesign · autoFix"]
+    Canvas["Konva canvas<br/>renders Design JSON"]
+    Import["Importers<br/>PSD · SVG · raster"]
+  end
+  subgraph API["FastAPI backend"]
+    Concepts["/api/design/concepts"]
+    Edit["/api/design/edit"]
+    Analyze["/api/analyze"]
+    Agent["/api/agent/plan<br/>/api/agent/critique"]
+    Photo["/api/photo · /api/pixel-edit"]
+  end
+  Pro["DeepSeek Pro<br/>(text)"]
+  Flash["DeepSeek Flash<br/>(text + vision)"]
+  Img["GPT Image"]
+
+  Chat --> Concepts & Edit & Analyze & Agent
+  Concepts -- "Slots[]" --> Engine
+  Edit -- "Ops[]" --> Engine
+  Import --> Engine
+  Engine --> Canvas
+  Concepts --> Pro
+  Edit & Analyze & Agent --> Flash
+  Photo --> Img
 ```
-Browser (React + react-konva)                         FastAPI backend
- ├─ Editor: renders Design JSON on a Konva canvas     ├─ /api/design/concepts  DeepSeek-V4-Pro  -> Slots[]
- │                                                     │    (+ uploaded image: DeepSeek Flash vision first)
- ├─ Design engine (pure TypeScript, 100+ tests)        ├─ /api/design/edit      DeepSeek-V4.1-Flash -> Ops[]
- │   buildDesign(Slots) -> layered Design (5 templates) ├─ /api/photo           GPT Image Flare -> photo
- │   checkDesign / autoFix (18 brand rules)             ├─ /api/analyze         DeepSeek Flash vision -> Slots
- │   applyOps(Design, Ops) (every edit, undoable)       └─ photo bank (42 pre-generated photos), brand assets
- ├─ Import: PSD (ag-psd) / SVG (sanitised) -> layers
- └─ Copilot chat: calls the API, applies ops
-```
 
-**Key design decision: the LLM never places pixels.** It fills *Slots* (template, colourway, headline, sub, CTA, hero,
-charms, stat card) or emits *Ops* (`update`, `add`, `delete`, `rebuild`, `resize`, `photo`, `pixel_edit`). Layout is
-deterministic code built from the 20 reference ads, so every output is on-brand and fully editable. The model only
-decides what to say and which brand assets to use.
+### Slots and Ops: the model decides, code draws
+The model never outputs coordinates. It either fills **Slots** — template, colourway, headline, sub, CTA, hero photo,
+charms, stat card — or emits **Ops**: `update`, `add`, `delete`, `reorder`, `rebuild`, `resize`, `photo`,
+`pixel_edit`. `buildDesign(slots)` turns Slots into layers using five templates derived from the 20 reference ads, and
+`applyOps(design, ops)` applies every edit as an undoable step. Because layout is ordinary code, it is unit-tested,
+and a brand rule can never be "forgotten" by the model.
 
-Guardrails on the copy: JSON mode plus schema validation, then one repair pass if the model copies an existing ad,
-invents statistics, offers or claims, or breaks length limits. Any edit that the brand rules don't allow (red text,
-a white logo on sky…) is declined with an on-brand alternative.
+### Guardrails on what the model writes
+- JSON mode plus Pydantic schema validation. If one model tier errors, the call falls back to the other (Pro ↔ Flash).
+- Copy checks: copying an existing ad, inventing statistics, offers or claims, or breaking length limits triggers one
+  repair pass, and a final safety net strips any offer or claim the user never gave.
+- Every applied edit runs through the brand checker with auto-fix, so an off-brand request can't land on the canvas.
 
-### Uploads and "variations like this"
-1. **Upload.** The paperclip, or a drop on the chat, imports the file as a new design. The importer also uploads a
-   flattened PNG preview to `/static/uploads/`. Nothing is attached to the chat message itself: the app remembers the
-   upload on the active design, and the planner gets only a `hasUpload` flag.
-2. **Read.** "Variations like this" (typed, or the button) sends the preview to `/api/analyze`. DeepSeek Flash vision
-   turns it into Slots (template, colourway, copy, hero, stat). The agent plays back what it saw, and the user
-   confirms or types a correction.
-3. **Generate.** `/api/design/concepts` gets the reference Slots **plus the uploaded image** (`referenceImage`).
-   DeepSeek Pro is text-only, so the image call runs on Flash, capped at 60 s. If it errors, times out or returns
-   invalid concepts, the backend falls back to the text-only Pro call (Slots only). The backend log shows which path
-   ran: `concepts: built with the reference image (flash)` or `…falling back to text-only`.
-4. **Build.** The same copy checks, claim scrubbing and "keep the reference's structure" rules run on either path.
-   Code then lays out the layers, and photos come from GPT Image or the photo bank. The upload's pixels are never
-   reused in the output.
+### Agent mode: understand → build → review
+Agent mode (toggle in the top bar, off by default) adds two loops on top of the classic pipeline:
 
-## Brand kit, as code
-- **Palette:** navy `#000856`, blue `#1F65D6`, sky `#3ECCFF`, white, plus bloom accents mint/yellow/pink/lilac.
-- **Logo:** sky or white on navy, navy on sky or white, white on blue. A pill is used over photos.
-- **Blooms:** the 12 official shapes (Peace, Energy, X, Spark, Grow, Pulse, Harmony, Motion, Balance, Ease, Surge,
-  Stride), scaled beyond the frame. Photos are cropped into chunky blooms or rounded frames.
-- **Assets:**
-  - 325 3D charms (65 types × 5 colours), sliced from the brand sheet and upscaled
-  - 7 real product-UI cut-outs (phones, tablets and laptops in hands)
-  - 14 illustrations
-  - 18 background templates, recoloured
-- **Fonts:** Barlow Condensed (headlines) and Inter (body), stand-ins for the licensed National 2. Swapping is one config line.
+1. **Understand.** An LLM planner decides whether the request is clear. If something important is missing (audience,
+   offer, how many options, format), it asks up to three questions as clickable chips, once. "Just go" is always there.
+2. **Review.** Each new design is rendered offscreen and scored: the deterministic brand checker plus a Flash vision
+   critique. The agent applies one fix per round, re-renders, re-scores and **keeps the better version** (up to two
+   rounds, about 45 s per design). The score change is shown in chat, e.g. `72 → 88`.
 
-## Run it
+Before each critique, code also checks that the photo subject's head is fully visible inside its bloom-shaped crop, and
+re-fits the photo if not.
 
-### One command
-```powershell
-powershell -ExecutionPolicy Bypass -File .\start.ps1             # set up if needed, start both servers, open the app
-powershell -ExecutionPolicy Bypass -File .\start.ps1 -Restart    # stop the running servers first (picks up code changes)
-powershell -ExecutionPolicy Bypass -File .\start.ps1 -NoBrowser  # same, without opening the browser
-```
-[`start.ps1`](start.ps1) does everything, in order:
-1. If there is no `.env`, it creates one from `.env.example` and stops so you can fill in the keys.
-2. It creates `backend/.venv` with Python 3.12 (using `uv` if installed, else `py -3.12 -m venv`) and installs
-   `backend/requirements.txt`.
-3. It runs `npm install` in `frontend/`.
-4. It starts the backend (FastAPI, http://localhost:8000) and the frontend (Vite, http://localhost:5173), each in its
-   own window. Close a window to stop that server.
-5. It waits until both answer, reports any empty API keys, then opens the app.
+### Variations from an uploaded image
+1. The upload is imported as a design, and a flattened preview is stored on the server.
+2. `/api/analyze` reads it with Flash vision into Slots. The agent plays back what it saw, and the user can correct it.
+3. `/api/design/concepts` writes new concepts grounded in that image (Flash, 60 s cap). If that fails it falls back to
+   the text-only Pro model using the Slots alone.
+4. Code lays out the layers and photos come from GPT Image or the photo bank. The upload's pixels are never reused.
 
-Steps 2 and 3 run only on the first run, or when `requirements.txt` / `package-lock.json` change (a hash stamp is
-kept in `.venv` and `node_modules`). Servers that are already running are left alone unless you pass `-Restart`.
+### Engineering details worth knowing
+- **Same-origin assets.** Vite proxies `/api` and `/static` to the backend, so images never taint the canvas and PNG
+  export keeps working.
+- **Fonts before first draw.** The canvas waits for `document.fonts` to load, otherwise Konva measures and wraps text
+  with the fallback font.
+- **Time budgets everywhere.** Backend budgets (26 s plan, 29 s critique) are set just under the frontend timeouts, so
+  calls fail cleanly instead of racing.
+- **Headless render route.** `/?render=ref:<id>&size=9:16` renders a design with no UI, for screenshots and checks.
 
-### Prerequisites
-- Windows 10/11 with Windows PowerShell 5.1. The script uses only built-in cmdlets.
-- Python 3.12 (`py -3.12`) or [uv](https://docs.astral.sh/uv/). Tested with Python 3.12.10 and uv.
-- Node.js 22 or newer with npm. Tested with Node 24.14.1 and npm 11.11.0.
+## The brand kit, as code
+- **Palette:** navy `#000856`, blue `#1F65D6`, sky `#3ECCFF` and white, plus bloom accents mint, yellow, pink and lilac.
+  Text is navy or white only.
+- **Logo:** sky or white on navy, navy on sky or white, white on blue; a logo pill over photos.
+- **Blooms:** the 12 official shapes, tinted at render time and scaled beyond the frame; photos are cropped into chunky
+  blooms or rounded frames.
+- **Assets:** 325 3D charms (65 types × 5 colours) sliced from the brand sheet, 7 product-UI device shots,
+  14 illustrations, 18 background templates and a 42-photo bank.
+- **Fonts:** Barlow Condensed and Inter as free stand-ins for the licensed National 2 (a one-line config swap).
 
-### Libraries (kept in the repo, versions pinned)
-| Part | File | What's in it |
-|---|---|---|
-| Backend | [`backend/requirements.txt`](backend/requirements.txt) | `fastapi` 0.143.3, `uvicorn` 0.54.0, `openai` 3.33.0 (DeepSeek and GPT Image clients), `pillow` 13.0.0, `numpy` 2.5.4, `python-dotenv` 1.2.4, `pydantic` 2.14.1, `python-multipart` 0.0.32 (uploads), `httpx` 0.28.1 |
-| Frontend | [`frontend/package.json`](frontend/package.json) + `package-lock.json` | React 19, Konva / react-konva, zustand, ag-psd (PSD import), Fontsource fonts; dev: Vite 8, TypeScript, Tailwind 4, Vitest |
+## Tech stack
 
-These files match what is installed in the working environment: every package in `requirements.txt` is installed at
-exactly that version. The venv also holds transitive dependencies (starlette, anyio, …) and a few optional uvicorn
-extras (`watchfiles`, `websockets`, `httptools`) that the app doesn't need. To reproduce by hand:
-`uv venv --python 3.12 backend/.venv; uv pip install --python backend/.venv/Scripts/python.exe -r backend/requirements.txt`
-and `cd frontend; npm install`.
+| Area | Choices |
+|---|---|
+| Frontend | React 19, TypeScript, Vite, Konva / react-konva, Zustand, Tailwind CSS 4, ag-psd |
+| Backend | Python, FastAPI, Pydantic, the OpenAI SDK (for both DeepSeek and GPT Image), Pillow, NumPy |
+| Models | DeepSeek-V4-Pro (concepts), DeepSeek-V4.1-Flash (edits, vision, planning, critique), GPT Image (photos, pixel edits) |
+| Testing | Vitest (168 tests), TypeScript strict type-check, GitHub Actions |
 
-### API keys (`.env` at the project root, never committed)
-Copy `.env.example` to `.env` and fill in:
+## Run it locally
+
+You need Python 3.12+, Node.js 22+ and API keys for an OpenAI-compatible DeepSeek endpoint and OpenAI image
+generation. Without keys the editor still runs: templates, **Recreate**, manual editing, import, the brand guard and
+export all work offline.
+
+**1. Configure keys.** Copy `.env.example` to `.env` in the project root and fill it in:
 
 | Variable | Used for |
 |---|---|
-| `DEEPSEEK_PRO_KEY`, `DEEPSEEK_PRO_BASE_URL`, `DEEPSEEK_PRO_MODEL` | Concepts and planning (text only) |
-| `DEEPSEEK_FLASH_KEY`, `DEEPSEEK_FLASH_BASE_URL`, `DEEPSEEK_FLASH_MODEL` | Quick edits, image analysis, image-grounded variations |
-| `OPENAI_API_KEY`, `IMAGE_MODEL` | GPT Image photos and pixel edits |
+| `DEEPSEEK_PRO_KEY`, `DEEPSEEK_PRO_BASE_URL`, `DEEPSEEK_PRO_MODEL` | Concepts (text only) |
+| `DEEPSEEK_FLASH_KEY`, `DEEPSEEK_FLASH_BASE_URL`, `DEEPSEEK_FLASH_MODEL` | Edits, image analysis, Agent mode |
+| `OPENAI_API_KEY`, `IMAGE_MODEL` | Photos and pixel edits |
 | `PRO_TIMEOUT`, `FLASH_TIMEOUT`, `IMAGE_TIMEOUT` (optional) | Per-call timeouts in seconds (defaults 120 / 60 / 200) |
 
-`http://localhost:8000/api/health` lists any missing keys.
+**2a. Windows — one command.**
+```powershell
+powershell -ExecutionPolicy Bypass -File .\start.ps1             # set up if needed, start both servers, open the app
+powershell -ExecutionPolicy Bypass -File .\start.ps1 -Restart    # restart the servers to pick up code changes
+```
+[`start.ps1`](start.ps1) creates `backend/.venv`, installs both sides only when the lockfiles change, starts FastAPI on
+`:8000` and Vite on `:5173`, waits for both and opens the browser.
 
-### Manual start and checks
-- Backend: `cd backend; .\.venv\Scripts\python.exe -m uvicorn app.main:app --port 8000` (no auto-reload: restart it,
-  or run `start.ps1 -Restart`, after backend changes)
-- Frontend: `cd frontend; npm run dev`
-- Checks: `cd frontend; npx tsc -p .; npx vitest run`
+**2b. macOS / Linux.**
+```bash
+# backend (terminal 1)
+cd backend
+python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+.venv/bin/python -m uvicorn app.main:app --port 8000
+
+# frontend (terminal 2)
+cd frontend
+npm ci && npm run dev        # http://localhost:5173
+```
+
+`http://localhost:8000/api/health` reports any missing keys.
+
+### Checks
+```bash
+cd frontend
+npm run typecheck   # TypeScript
+npm test            # Vitest, 168 tests
+npm run build       # production build
+```
+`backend/scripts/smoke_test.py` checks the live model endpoints (latency, JSON mode, vision, one image).
 
 ## Repo map
-- `frontend/src/design/` — templates, brand checker, ops engine (pure TS, tested)
-- `frontend/src/editor/`, `frontend/src/canvas/` — editor UI, Konva renderer, copilot flows
-- `frontend/src/import/` — PSD / SVG / raster import to editable layers
-- `backend/app/` — FastAPI, prompts, validation, LLM and image clients
-- `backend/data/references.json` — the 20 reference ads recreated as Slots
-- `backend/scripts/` — asset pipeline (`prep_assets.py`, `fix_assets.py`), photo bank, smoke tests
-- `docs/CONTRACT.md` — interfaces between the parts
+
+| Path | What's there |
+|---|---|
+| `frontend/src/design/` | Templates, brand checker, Ops engine, photo fitting (pure TS, tested) |
+| `frontend/src/agent/` | Agent mode: planner client, clarifying questions, render-and-review loop |
+| `frontend/src/editor/`, `frontend/src/canvas/` | Editor UI, Konva renderer, copilot flows, Zustand store |
+| `frontend/src/import/` | PSD, SVG and raster import to editable layers |
+| `backend/app/` | FastAPI app, prompts, validation, LLM and image clients, agent endpoints |
+| `backend/data/references.json` | The 20 reference ads, recreated as Slots |
+| `backend/scripts/` | Asset pipeline (slicing the charm sheet, bloom masks, logo), photo bank, smoke test |
+| `docs/` | [Interface contract](docs/CONTRACT.md), [original plan](docs/PLAN.md), [demo script](docs/DEMO.md), [Agent mode spec](docs/superpowers/specs/2026-10-17-agent-mode-design.md), pitch deck |
+
+## How it was built
+The work was split into workstreams — assets, backend, editor, design engine and importers — that met at one typed
+contract ([`docs/CONTRACT.md`](docs/CONTRACT.md), with types in `frontend/src/types.ts`). That let them be built in
+parallel with AI coding agents (Claude Code), which the hackathon required, while the contract and tests kept the parts
+consistent. Agent mode was specified in a design doc first and then implemented against it.
 
 ## Known limitations
+- Fonts are free stand-ins for the licensed brand fonts, and charm artwork is upscaled from small sources.
+- DeepSeek Pro is text-only, so image-grounded variations are written by Flash, a weaker copywriter. The same copy and
+  brand checks apply, and the app falls back to Pro without the image if Flash fails.
 - The two-column comparison in reference 09 renders as standard checklist rows.
-- Fonts are free stand-ins for the licensed brand fonts.
-- Charm artwork is upscaled from small sources.
-- DeepSeek Pro can't take images, so image-grounded variations are written by Flash. Flash is a weaker copywriter
-  than Pro, but the same copy and brand checks apply. If Flash fails, the app falls back to Pro without the image.
+- The frontend ships as one large bundle; the PSD importer is the main candidate for code-splitting.
+
+## Brand assets
+The Xero brand kit, reference ads and product imagery in `assets/` and `backend/static/` were provided by the hackathon
+organisers for this challenge and belong to Xero. They are included only so the project runs as built; this repository
+is a personal project and is not affiliated with or endorsed by Xero.

@@ -37,7 +37,7 @@ EDIT_BUDGET = 105.0
 
 _missing_keys = [k for k, ok in keys_present().items() if not ok]
 if _missing_keys:
-    log.warning("API keys missing: %s -- those AI features will fail until set in backend/.env",
+    log.warning("API keys missing: %s -- those AI features will fail until set in .env at the project root",
                 ", ".join(_missing_keys))
 app.add_middleware(
     CORSMiddleware,
